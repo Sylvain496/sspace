@@ -1,0 +1,2 @@
+create index if not exists private_message_notifications_conversation_idx on public.private_message_notifications(conversation_id);
+create index if not exists private_message_notifications_sender_idx on public.private_message_notifications(sender_id);
