@@ -365,6 +365,39 @@ body.app-light .hashtag-link{color:#315fbd}
 }
 @media(prefers-reduced-motion:reduce){.hashtag-search-trigger,.compose-emoji{transform:none;transition:none}}
 
+
+/* Finition visuelle : onglets arrondis et identité SSPACE centrée */
+.topin{position:relative;justify-content:flex-start}
+.topin>.brand{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  z-index:2;white-space:nowrap;font-size:32px;letter-spacing:-2.5px;
+  background:linear-gradient(100deg,#63e4ff 0%,#7e8cff 28%,#c47aff 58%,#ff79d7 82%,#63e4ff 100%);
+  background-size:240% 100%;-webkit-background-clip:text;background-clip:text;
+  color:transparent;text-shadow:0 0 22px #8b68ff35;
+  animation:sspaceBrandFlow 5s ease-in-out infinite,sspaceBrandGlow 2.8s ease-in-out infinite;
+}
+.topin>.brand .ss{letter-spacing:-5px}
+@keyframes sspaceBrandFlow{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes sspaceBrandGlow{0%,100%{filter:drop-shadow(0 0 4px #58cfff55)}50%{filter:drop-shadow(0 0 11px #b66cffaa)}}
+.topin>.menu-toggle,.topin>.top-actions{position:relative;z-index:3}
+.main-menu .main-menu-item{border-radius:15px}
+.main-menu .main-menu-sub{border-radius:13px}
+.main-menu .menu-language button{border-radius:999px}
+.main-menu .main-menu-head .btn{border-radius:50%;width:34px;height:34px;padding:0;display:grid;place-items:center}
+.main-menu .main-menu-bottom .main-menu-item{border-radius:15px}
+.navitem,.mobile-nav button,.btn,.preference-choice,.sort-control .field{border-radius:14px}
+body.app-light .topin>.brand{text-shadow:0 0 18px #8b68ff28}
+@media(max-width:650px){
+ .topin>.brand{font-size:23px;letter-spacing:-1.8px}
+ .topin>.brand .ss{letter-spacing:-3.5px}
+ .topin>.top-actions{gap:5px}
+ .topin>.top-actions .btn{padding:7px 8px}
+ .topin>.menu-toggle{z-index:4}
+}
+@media(prefers-reduced-motion:reduce){
+ .topin>.brand{animation:none;background-position:50% 50%}
+}
+
 </style>
 </head>
 <body>
