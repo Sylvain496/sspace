@@ -49,12 +49,26 @@ create index if not exists post_mentions_user_idx on public.post_mentions(mentio
 alter table public.post_poll_options enable row level security;
 alter table public.post_poll_votes enable row level security;
 alter table public.post_mentions enable row level security;
-grant select on public.post_poll_options,public.post_poll_votes,public.post_mentions to authenticated;
-grant insert on public.post_poll_votes to authenticated;
+grant select,insert on public.post_poll_options,public.post_mentions to authenticated;
+grant select,insert on public.post_poll_votes to authenticated;
 
 drop policy if exists "Poll options visible with their post" on public.post_poll_options;
 create policy "Poll options visible with their post" on public.post_poll_options
 for select to authenticated using (exists(select 1 from public.posts p where p.id=post_id));
+drop policy if exists "Authors add options to own polls" on public.post_poll_options;
+create policy "Authors add options to own polls" on public.post_poll_options
+for insert to authenticated with check (exists(
+  select 1 from public.posts p where p.id=post_id and p.user_id=(select auth.uid()) and p.poll_question is not null
+));
+drop policy if exists "Authors tag accepted friends on own posts" on public.post_mentions;
+create policy "Authors tag accepted friends on own posts" on public.post_mentions
+for insert to authenticated with check (
+  tagged_by=(select auth.uid())
+  and exists(select 1 from public.posts p where p.id=post_id and p.user_id=(select auth.uid()))
+  and exists(select 1 from public.friend_requests fr where fr.status='accepted'
+    and ((fr.sender_id=(select auth.uid()) and fr.receiver_id=mentioned_user_id)
+      or (fr.receiver_id=(select auth.uid()) and fr.sender_id=mentioned_user_id)))
+);
 drop policy if exists "Poll votes visible with their post" on public.post_poll_votes;
 create policy "Poll votes visible with their post" on public.post_poll_votes
 for select to authenticated using (exists(select 1 from public.posts p where p.id=post_id));
@@ -80,7 +94,7 @@ create or replace function public.create_post_bundle(
   p_mentioned_user_ids uuid[]
 ) returns uuid
 language plpgsql
-security definer
+security invoker
 set search_path=''
 as $function$
 declare
@@ -119,7 +133,7 @@ begin
   end if;
 
   insert into public.posts(user_id,title,content,image_url,media_url,media_type,poll_question)
-  values(v_user,coalesce(p_title,''),coalesce(nullif(p_content,''),' '),p_image_url,p_media_url,p_media_type,nullif(trim(p_poll_question),''))
+  values(v_user,coalesce(nullif(trim(p_title),''),'Publication'),coalesce(nullif(p_content,''),' '),p_image_url,p_media_url,p_media_type,nullif(trim(p_poll_question),''))
   returning id into v_post;
 
   if p_poll_question is not null then
