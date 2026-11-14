@@ -164,7 +164,7 @@
 const SUPABASE_URL='https://sikxoyylihsigzirewmi.supabase.co';
 const SUPABASE_ANON_KEY='sb_publishable_JAMkNnPlM4_Evk1wKrSgmg_--wnErZj';
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
-let currentUser=null,currentProfile=null,signupMode=false,activeView='feed',postsCache=[],feedLimit=24,onlineChannel=null,activeConversation=null,activeChatChannel=null,chatDecor='aurora-night',hasPremium=false,onlineHeartbeat=null,launcherConversation=null,launcherOtherUser=null,launcherChannel=null,voiceRecorder=null,voiceChunks=[],voiceBlob=null,voicePreviewUrl=null;const busyLikes=new Set();
+let currentUser=null,currentProfile=null,signupMode=false,activeView='feed',postsCache=[],feedLimit=24,onlineChannel=null,activeConversation=null,activeChatChannel=null,chatDecor='aurora-night',hasPremium=false,onlineHeartbeat=null,lastActivityAt=Date.now(),isPresenceTracked=false,launcherConversation=null,launcherOtherUser=null,launcherChannel=null,voiceRecorder=null,voiceChunks=[],voiceBlob=null,voicePreviewUrl=null;const busyLikes=new Set();
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const initials=s=>(s||'S').trim().slice(0,1).toUpperCase();
@@ -200,19 +200,22 @@ function startOnlinePresence(){
   .on('presence',{event:'sync'},()=>{renderOnlineUsers(onlineChannel.presenceState());if(!$('messageLauncher').classList.contains('hidden')&&$('launcherChat').classList.contains('hidden'))refreshLauncherPeople()})
   .subscribe(async status=>{
    if(status==='SUBSCRIBED'){
-    const p=currentProfile||{};
-    await onlineChannel.track({userId:currentUser.id,displayName:p.display_name||p.username||'Membre',username:p.username||'',avatarUrl:p.avatar_url||null,profileEffect:avatarEffect(p.profile_effect),onlineAt:new Date().toISOString()});
-    await updateLastSeen();
+    lastActivityAt=Date.now();
+    await trackCurrentPresence();
+    await updateLastSeen(new Date(lastActivityAt).toISOString());
     if(onlineHeartbeat)clearInterval(onlineHeartbeat);
-    onlineHeartbeat=setInterval(updateLastSeen,45000);
+    onlineHeartbeat=setInterval(updatePresenceHeartbeat,45000);
    }
   });
 }
-async function updateLastSeen(){if(currentUser)await db.from('profiles').update({last_seen_at:new Date().toISOString()}).eq('id',currentUser.id)}
+async function updateLastSeen(value){if(currentUser)await db.from('profiles').update({last_seen_at:value||new Date().toISOString()}).eq('id',currentUser.id)}
+async function trackCurrentPresence(){if(!currentUser||!onlineChannel||isPresenceTracked)return;const p=currentProfile||{};const {error}=await onlineChannel.track({userId:currentUser.id,displayName:p.display_name||p.username||'Membre',username:p.username||'',avatarUrl:p.avatar_url||null,profileEffect:avatarEffect(p.profile_effect),onlineAt:new Date().toISOString()});if(!error)isPresenceTracked=true}
+async function updatePresenceHeartbeat(){if(!currentUser)return;const idleFor=Date.now()-lastActivityAt;if(idleFor>=5*60*1000){if(isPresenceTracked&&onlineChannel){try{await onlineChannel.untrack()}catch(e){}isPresenceTracked=false}await updateLastSeen(new Date(lastActivityAt).toISOString());return}await updateLastSeen(new Date(lastActivityAt).toISOString());await trackCurrentPresence()}
+function noteUserActivity(){if(!currentUser)return;lastActivityAt=Date.now();if(onlineChannel&&!isPresenceTracked)trackCurrentPresence()}
 async function stopOnlinePresence(){
  if(onlineHeartbeat){clearInterval(onlineHeartbeat);onlineHeartbeat=null}
  if(currentUser)await updateLastSeen();
- if(onlineChannel){const channel=onlineChannel;onlineChannel=null;try{await channel.untrack()}catch(e){}try{await db.removeChannel(channel)}catch(e){}}
+ if(onlineChannel){const channel=onlineChannel;onlineChannel=null;isPresenceTracked=false;try{await channel.untrack()}catch(e){}try{await db.removeChannel(channel)}catch(e){}}
  $('onlineUsers').innerHTML='<div class="online-placeholder">Connecte-toi pour voir les membres en ligne.</div>';
  $('onlineCount').textContent='Hors ligne';
 }
@@ -344,5 +347,5 @@ document.addEventListener('click',async e=>{const b=e.target.closest('[data-foll
 $('signOut').onclick=()=>db.auth.signOut();
 db.auth.onAuthStateChange((event,session)=>{if(event==='SIGNED_IN'&&session?.user&&currentUser?.id!==session.user.id){queueMicrotask(()=>{if(currentUser?.id!==session.user.id)enterApp(session.user)})}if(event==='SIGNED_OUT'){stopOnlinePresence();if(launcherChannel)db.removeChannel(launcherChannel);$('messageLauncher').classList.add('hidden');currentUser=null;currentProfile=null;$('appView').classList.add('hidden');$('mobileNav').classList.add('hidden');$('authView').classList.remove('hidden');$('headerAuth').textContent='Connexion';$('headerUser').textContent=''}});
 (async()=>{const {data}=await db.auth.getSession();if(data.session)await enterApp(data.session.user);else setAuthMode(false)})();
-function syncKeyboardState(){const vv=window.visualViewport;const open=!!vv&&window.innerHeight-vv.height>140;document.body.classList.toggle('keyboard-open',open);if(vv)document.documentElement.style.setProperty('--visible-height',vv.height+'px')}document.addEventListener('focusin',e=>{if(e.target.matches('input,textarea,select')){document.body.classList.add('keyboard-open');setTimeout(()=>{try{e.target.scrollIntoView({block:'nearest',behavior:'smooth'})}catch(_){ }syncKeyboardState()},220)}});document.addEventListener('focusout',e=>{if(e.target.matches('input,textarea,select'))setTimeout(syncKeyboardState,220)});if(window.visualViewport){window.visualViewport.addEventListener('resize',syncKeyboardState);window.visualViewport.addEventListener('scroll',syncKeyboardState)}window.addEventListener('resize',syncKeyboardState);if('serviceWorker'in navigator&&location.protocol!=='file:')window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+function syncKeyboardState(){const vv=window.visualViewport;const open=!!vv&&window.innerHeight-vv.height>140;document.body.classList.toggle('keyboard-open',open);if(vv)document.documentElement.style.setProperty('--visible-height',vv.height+'px')}['pointerdown','keydown','touchstart','scroll'].forEach(evt=>document.addEventListener(evt,noteUserActivity,{passive:true}));document.addEventListener('focusin',e=>{noteUserActivity();if(e.target.matches('input,textarea,select')){document.body.classList.add('keyboard-open');setTimeout(()=>{try{e.target.scrollIntoView({block:'nearest',behavior:'smooth'})}catch(_){ }syncKeyboardState()},220)}});document.addEventListener('focusout',e=>{if(e.target.matches('input,textarea,select'))setTimeout(syncKeyboardState,220)});if(window.visualViewport){window.visualViewport.addEventListener('resize',syncKeyboardState);window.visualViewport.addEventListener('scroll',syncKeyboardState)}window.addEventListener('resize',syncKeyboardState);if('serviceWorker'in navigator&&location.protocol!=='file:')window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 </script></body></html>
