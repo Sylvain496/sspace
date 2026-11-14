@@ -9,6 +9,7 @@ import android.webkit.WebSettings;
 import android.view.Window;
 
 public class MainActivity extends Activity {
+    // SSPACE Android shell; web features are bundled in app/src/main/assets.
     private WebView webView;
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
