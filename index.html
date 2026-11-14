@@ -209,7 +209,7 @@ function startOnlinePresence(){
   });
 }
 async function updateLastSeen(value){if(currentUser)await db.from('profiles').update({last_seen_at:value||new Date().toISOString()}).eq('id',currentUser.id)}
-async function trackCurrentPresence(){if(!currentUser||!onlineChannel||isPresenceTracked)return;const p=currentProfile||{};const {error}=await onlineChannel.track({userId:currentUser.id,displayName:p.display_name||p.username||'Membre',username:p.username||'',avatarUrl:p.avatar_url||null,profileEffect:avatarEffect(p.profile_effect),onlineAt:new Date().toISOString()});if(!error)isPresenceTracked=true}
+async function trackCurrentPresence(){if(!currentUser||!onlineChannel||isPresenceTracked)return;const p=currentProfile||{};const status=await onlineChannel.track({userId:currentUser.id,displayName:p.display_name||p.username||'Membre',username:p.username||'',avatarUrl:p.avatar_url||null,profileEffect:avatarEffect(p.profile_effect),onlineAt:new Date().toISOString()});if(status==='ok')isPresenceTracked=true}
 async function updatePresenceHeartbeat(){if(!currentUser)return;const idleFor=Date.now()-lastActivityAt;if(idleFor>=5*60*1000){if(isPresenceTracked&&onlineChannel){try{await onlineChannel.untrack()}catch(e){}isPresenceTracked=false}await updateLastSeen(new Date(lastActivityAt).toISOString());return}await updateLastSeen(new Date(lastActivityAt).toISOString());await trackCurrentPresence()}
 function noteUserActivity(){if(!currentUser)return;lastActivityAt=Date.now();if(onlineChannel&&!isPresenceTracked)trackCurrentPresence()}
 async function stopOnlinePresence(){
