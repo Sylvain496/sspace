@@ -506,7 +506,7 @@ async function loadSuggestedMembers(){
   db.from('friend_requests').select('sender_id,receiver_id,status').or('sender_id.eq.'+currentUser.id+',receiver_id.eq.'+currentUser.id)
  ]);
  if(error){host.innerHTML='<div class="tiny muted">Suggestions temporairement indisponibles.</div>';return}
- const unavailable=new Set((requests||[]).filter(x=>x.status==='accepted'||x.status==='pending').flatMap(x=>[x.sender_id,x.receiver_id]));
+ const unavailable=new Set((requests||[]).filter(x=>['accepted','pending','declined'].includes(x.status)).flatMap(x=>[x.sender_id,x.receiver_id]));
  const choices=(people||[]).filter(p=>!unavailable.has(p.id)).slice(0,10);
  if(!choices.length){host.innerHTML='<div class="tiny muted">Tu connais déjà les membres proposés. Reviens voir plus tard!</div>';return}
  host.innerHTML=choices.map(p=>{const name=p.display_name||p.username||'Membre';return '<article class="suggested-member"><button type="button" class="avatar effect-'+avatarEffect(p.profile_effect)+'" data-open-profile="'+p.id+'" aria-label="Voir le profil de '+esc(name)+'">'+(p.avatar_url?'<img src="'+esc(p.avatar_url)+'" alt="">':esc(initials(name)))+'</button><div class="suggested-member-info"><b>'+esc(name)+'</b><span>@'+esc(p.username||'membre')+'</span></div><button type="button" class="btn primary friend-add" data-friend-add="'+p.id+'" title="Envoyer une invitation" aria-label="Inviter '+esc(name)+'">+</button></article>'}).join('');
