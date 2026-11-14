@@ -183,7 +183,123 @@ body.app-light .main-menu-bottom{border-color:#d8dced}body.app-light .main-menu-
 .theme-group-label{grid-column:1/-1;font-size:11px;color:#aeb8d8;font-weight:700;letter-spacing:1px;margin:8px 0 2px}.premium-label{color:#f2cc7c}
 .profile-theme-option{display:flex;align-items:center;gap:9px;padding:10px;border:1px solid #3a4264;border-radius:11px;background:#151b31;color:#f2f3ff;text-align:left}.profile-theme-option span{font-size:20px}.profile-theme-option b{font-size:12px}.profile-theme-option.selected{border-color:#a88cff;box-shadow:0 0 0 2px #9b73ff55}.profile-theme-option.locked{opacity:.5;cursor:not-allowed}.profile-theme-option small{margin-left:auto;color:#f2cc7c;font-size:9px}
 @media(max-width:650px){.main-menu{top:68px;left:10px}.friend-request-row{gap:6px}.friend-request-row .btn{padding:7px 8px;font-size:12px}.topin{gap:9px}.menu-toggle{width:38px;height:38px}}
-.menu-language{display:flex;align-items:center;gap:6px;font-size:12px;color:#8590b6}.menu-language button{border:0;background:transparent;color:#aeb8d8;font-size:12px;font-weight:800;padding:5px 3px;border-radius:6px}.menu-language button.selected{color:#fff;background:#39436a}.app-preferences h3{font-size:14px;margin:20px 0 9px}.preference-options{display:flex;gap:9px;flex-wrap:wrap}.preference-choice{border:1px solid #3a4264;border-radius:11px;padding:11px 16px;background:#151b31;color:#f2f3ff;font-weight:700}.preference-choice.selected{border-color:#a88cff;background:#29234a;box-shadow:0 0 0 2px #9b73ff33}body.app-light{--bg:#f3f5fb;--panel:#fff;--panel2:#edf0fa;--line:#d8deed;--text:#20253a;--muted:#626d89;color-scheme:light;background:radial-gradient(ellipse at 12% 0%,#e1eaff 0,transparent 36%),radial-gradient(ellipse at 95% 20%,#f0e5ff 0,transparent 28%),var(--bg);color:var(--text)}body.app-light .top{background:#ffffffed;border-bottom-color:#dce1ef}body.app-light .side,body.app-light .card{background:#ffffffed;border-color:#dce1ef}body.app-light .main-menu{background:#fff;border-color:#dce1ef;box-shadow:0 22px 70px #34406433}body.app-light .main-menu-head{border-color:#e1e5f0;color:#20253a}body.app-light .main-menu-item{color:#38415c}body.app-light .main-menu-item:hover,body.app-light .main-menu-item.active{background:#edf0ff;color:#20253a}body.app-light .main-menu-sub{color:#59647f}body.app-light .btn:not(.primary),body.app-light .preference-choice,body.app-light .profile-theme-option{background:#f1f3fa;color:#29314a;border-color:#d8deed}body.app-light .field,body.app-light .compose textarea{background:#f7f8fc;color:#20253a;border-color:#d8deed}body.app-light .navitem{color:#59647f}body.app-light .navitem:hover,body.app-light .navitem.active{background:#edf0ff;color:#20253a}body.app-light .menu-language button{color:#59647f}body.app-light .menu-language button.selected{background:#e7eaff;color:#30395b}body.app-light .profile-card{color:#fff}</style>
+.menu-language{display:flex;align-items:center;gap:6px;font-size:12px;color:#8590b6}.menu-language button{border:0;background:transparent;color:#aeb8d8;font-size:12px;font-weight:800;padding:5px 3px;border-radius:6px}.menu-language button.selected{color:#fff;background:#39436a}.app-preferences h3{font-size:14px;margin:20px 0 9px}.preference-options{display:flex;gap:9px;flex-wrap:wrap}.preference-choice{border:1px solid #3a4264;border-radius:11px;padding:11px 16px;background:#151b31;color:#f2f3ff;font-weight:700}.preference-choice.selected{border-color:#a88cff;background:#29234a;box-shadow:0 0 0 2px #9b73ff33}body.app-light{--bg:#f3f5fb;--panel:#fff;--panel2:#edf0fa;--line:#d8deed;--text:#20253a;--muted:#626d89;color-scheme:light;background:radial-gradient(ellipse at 12% 0%,#e1eaff 0,transparent 36%),radial-gradient(ellipse at 95% 20%,#f0e5ff 0,transparent 28%),var(--bg);color:var(--text)}body.app-light .top{background:#ffffffed;border-bottom-color:#dce1ef}body.app-light .side,body.app-light .card{background:#ffffffed;border-color:#dce1ef}body.app-light .main-menu{background:#fff;border-color:#dce1ef;box-shadow:0 22px 70px #34406433}body.app-light .main-menu-head{border-color:#e1e5f0;color:#20253a}body.app-light .main-menu-item{color:#38415c}body.app-light .main-menu-item:hover,body.app-light .main-menu-item.active{background:#edf0ff;color:#20253a}body.app-light .main-menu-sub{color:#59647f}body.app-light .btn:not(.primary),body.app-light .preference-choice,body.app-light .profile-theme-option{background:#f1f3fa;color:#29314a;border-color:#d8deed}body.app-light .field,body.app-light .compose textarea{background:#f7f8fc;color:#20253a;border-color:#d8deed}body.app-light .navitem{color:#59647f}body.app-light .navitem:hover,body.app-light .navitem.active{background:#edf0ff;color:#20253a}body.app-light .menu-language button{color:#59647f}body.app-light .menu-language button.selected{background:#e7eaff;color:#30395b}body.app-light .profile-card{color:#fff}
+/* SSPACE — fenêtre du menu principal, finition néon */
+.main-menu{
+  background:
+    radial-gradient(ellipse at 8% 0%,#315bd044 0,transparent 38%),
+    radial-gradient(ellipse at 100% 18%,#a34dff35 0,transparent 34%),
+    linear-gradient(155deg,#111a35 0%,#111326 58%,#1b1230 100%);
+  border:1px solid #5965a0;
+  box-shadow:0 24px 75px #02040dcc,0 0 0 1px #7c75ff25,0 0 28px #635dff2b;
+  overflow:hidden;
+  isolation:isolate;
+}
+.main-menu:before{
+  content:"";position:absolute;left:0;right:0;top:0;height:3px;
+  background:linear-gradient(90deg,#39c7ff,#6575ff 38%,#bd5cff 72%,#ff65c8);
+  pointer-events:none;
+}
+.main-menu-head{
+  position:relative;
+  padding:9px 5px 14px;
+  border-bottom:1px solid #48517a;
+  color:#f5f3ff;
+  text-shadow:0 0 16px #8c78ff70;
+}
+.main-menu-head b{font-size:14px;letter-spacing:1.4px}
+.main-menu-head .btn{
+  background:#252b4b;border-color:#505b8d;color:#f5f5ff;
+  border-radius:10px;
+}
+.main-menu .main-menu-item{
+  position:relative;
+  margin:4px 0;
+  min-height:45px;
+  color:#dce5ff;
+  border:1px solid transparent;
+  transition:background .18s ease,border-color .18s ease,transform .18s ease,box-shadow .18s ease;
+}
+.main-menu .main-menu-item:hover{
+  color:#fff;
+  background:linear-gradient(100deg,#2a4776a8,#49316fa8);
+  border-color:#6678c566;
+  box-shadow:inset 3px 0 0 #57c9ff,0 5px 18px #03081755;
+  transform:translateX(2px);
+}
+.main-menu .main-menu-item.active{
+  color:#fff;
+  background:linear-gradient(105deg,#245fbd 0%,#5745b9 58%,#813fb0 100%);
+  border-color:#8d9aff;
+  box-shadow:0 6px 22px #4659d94d,inset 0 1px #ffffff2b;
+}
+.main-menu .main-menu-item.active:after{
+  content:"";position:absolute;right:11px;width:6px;height:6px;
+  border-radius:50%;background:#7cf2ff;box-shadow:0 0 10px #7cf2ff;
+}
+.main-menu .main-menu-sub{
+  color:#aebce2;border-radius:9px;margin:1px 0 7px;
+}
+.main-menu .main-menu-sub:hover{
+  color:#fff;background:#263454;
+}
+.main-menu .request-count{
+  background:linear-gradient(120deg,#398cff,#a34fff);
+  color:white;border:1px solid #a9b4ff55;
+  box-shadow:0 0 12px #7c68ff55;
+}
+.main-menu .menu-language{
+  display:flex;align-items:center;gap:5px;color:#7785b2;
+}
+.main-menu .menu-language button{
+  border:1px solid transparent;border-radius:8px;
+  padding:6px 8px;background:transparent;color:#b8c5e8;
+}
+.main-menu .menu-language button.selected{
+  color:#fff;background:linear-gradient(120deg,#286acb,#7448bd);
+  border-color:#8a9dff;box-shadow:0 0 14px #6b6dff55;
+}
+.main-menu .main-menu-bottom{border-color:#465078}
+.main-menu .main-menu-bottom .main-menu-item{
+  background:linear-gradient(110deg,#3a1c3a,#291a36);
+  border-color:#71436e;color:#ffb0c3;
+}
+.main-menu .main-menu-bottom .main-menu-item:hover{
+  background:linear-gradient(110deg,#592449,#3d2450);
+  border-color:#c46aa5;box-shadow:0 0 18px #d84e9b30;
+}
+.main-menu button:focus-visible{
+  outline:2px solid #7ce7ff;outline-offset:2px;
+}
+body.app-light .main-menu{
+  background:
+    radial-gradient(ellipse at 8% 0%,#6e9dff28 0,transparent 38%),
+    radial-gradient(ellipse at 100% 18%,#d58cff30 0,transparent 34%),
+    linear-gradient(155deg,#fff 0%,#f3f5ff 58%,#f8efff 100%);
+  border-color:#aeb9ed;
+  box-shadow:0 22px 65px #34406445,0 0 24px #7d75ff25;
+}
+body.app-light .main-menu-head{color:#252b48;border-color:#d9def2}
+body.app-light .main-menu-head .btn{background:#edf0ff;border-color:#cbd2ef;color:#30395b}
+body.app-light .main-menu .main-menu-item{color:#394465}
+body.app-light .main-menu .main-menu-item:hover{
+  color:#26335b;background:linear-gradient(100deg,#e4f0ff,#f0e8ff);
+  border-color:#c5cafa;box-shadow:inset 3px 0 0 #388ce8,0 5px 16px #6675b01c;
+}
+body.app-light .main-menu .main-menu-item.active{
+  color:#fff;background:linear-gradient(105deg,#347fe0,#7052cf 58%,#9a50c7);
+  border-color:#8a9be9;box-shadow:0 6px 20px #6573d63b;
+}
+body.app-light .main-menu .main-menu-sub{color:#66708e}
+body.app-light .main-menu .main-menu-sub:hover{color:#35436b;background:#e8edff}
+body.app-light .main-menu .menu-language button{color:#59647f}
+body.app-light .main-menu .menu-language button.selected{color:#fff;background:linear-gradient(120deg,#347fe0,#8052ce);border-color:#8a9be9}
+body.app-light .main-menu .main-menu-bottom{border-color:#d8dced}
+body.app-light .main-menu .main-menu-bottom .main-menu-item{color:#a32e4d;background:linear-gradient(110deg,#fff0f5,#f7eaff);border-color:#efc4d9}
+body.app-light .main-menu .main-menu-bottom .main-menu-item:hover{background:#ffe2ed;border-color:#df9bb9}
+@media(prefers-reduced-motion:reduce){.main-menu .main-menu-item{transition:none}}
+
+</style>
 </head>
 <body>
 <header class="top"><div class="shell topin"><button id="menuToggle" class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false">☰</button><a class="brand" href="#" aria-label="SSPACE"><span class="ss">SS</span>PACE</a><div class="top-actions"><span id="headerUser" class="muted tiny"></span><button id="openMessageLauncher" class="btn top-message-btn" type="button" aria-label="Ouvrir les messages">✉ Messages</button><button id="headerAuth" class="btn primary">Connexion</button></div></div></header>
