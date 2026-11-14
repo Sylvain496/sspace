@@ -73,14 +73,20 @@ public class MainActivity extends Activity {
                 filePathCallback = callback;
                 Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("image/*");
+                intent.setType("*/*");
+                intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{
+                    "image/jpeg", "image/png", "image/webp", "image/gif",
+                    "audio/mpeg", "audio/mp3", "audio/wav", "audio/x-wav",
+                    "audio/ogg", "audio/webm", "audio/mp4", "audio/aac",
+                    "video/mp4", "video/webm"
+                });
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 try {
                     startActivityForResult(intent, REQUEST_FILE_PICKER);
                 } catch (Exception error) {
                     filePathCallback = null;
                     callback.onReceiveValue(null);
-                    Toast.makeText(MainActivity.this, "Impossible d’ouvrir les photos.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Impossible d’ouvrir les fichiers.", Toast.LENGTH_SHORT).show();
                     return false;
                 }
                 return true;
