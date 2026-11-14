@@ -484,7 +484,7 @@ function renderFeedSorted(){
  renderPosts(rows,$('feedList'));
 }
 function renderPostText(content){
- return esc(content||'').replace(/(^|\\s)(#[\\p{L}\\p{N}_]{2,40})/gu,(all,space,tag)=>space+'<button type="button" class="hashtag-link" data-hashtag-search="'+esc(tag.slice(1))+'">'+tag+'</button>');
+ return esc(content||'').replace(/(^|\s)(#[\p{L}\p{N}_]{2,40})/gu,(all,space,tag)=>space+'<button type="button" class="hashtag-link" data-hashtag-search="'+esc(tag.slice(1))+'">'+tag+'</button>');
 }
 async function searchHashtag(raw){
  const tag=String(raw||'').trim().replace(/^#/,'').toLowerCase();
