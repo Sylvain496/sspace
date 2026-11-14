@@ -1,0 +1,12 @@
+alter table public.messages add column if not exists text_style text not null default 'classic';
+alter table public.messages add column if not exists text_color text not null default '#f4f6ff';
+alter table public.messages drop constraint if exists messages_text_style_check;
+alter table public.messages add constraint messages_text_style_check check (text_style in ('classic','serif','rounded','typewriter','elegant','pixel'));
+alter table public.messages drop constraint if exists messages_text_color_check;
+alter table public.messages add constraint messages_text_color_check check (text_color in ('#f4f6ff','#70d7ff','#b99aff','#ff8fcf','#8fe3b0','#ffd36e','#ff8a8a'));
+alter table public.conversation_settings add column if not exists text_style text not null default 'classic';
+alter table public.conversation_settings add column if not exists text_color text not null default '#f4f6ff';
+alter table public.conversation_settings drop constraint if exists conversation_settings_text_style_check;
+alter table public.conversation_settings add constraint conversation_settings_text_style_check check (text_style in ('classic','serif','rounded','typewriter','elegant','pixel'));
+alter table public.conversation_settings drop constraint if exists conversation_settings_text_color_check;
+alter table public.conversation_settings add constraint conversation_settings_text_color_check check (text_color in ('#f4f6ff','#70d7ff','#b99aff','#ff8fcf','#8fe3b0','#ffd36e','#ff8a8a'));
