@@ -6,40 +6,14 @@ on:
     paths:
       - 'android/**'
       - 'index.html'
-      - 'assets/**'
       - 'supabase/migrations/**'
       - '.github/workflows/android-apk.yml'
-permissions:
-  contents: write
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Restore and commit approved SSPACE intro artwork
-        uses: actions/download-artifact@v4
-        with:
-          name: SSPACE-Deployment-Bundle
-          repository: ${{ github.repository }}
-          run-id: 43656372986
-          github-token: ${{ github.token }}
-          path: /tmp/sspace-artwork
-      - name: Integrate intro artwork into Web and Android
-        run: |
-          mkdir -p /tmp/sspace-bundle assets android/app/src/main/assets/assets
-          unzip -o /tmp/sspace-artwork/SSPACE-deploiement.zip -d /tmp/sspace-bundle
-          cp /tmp/sspace-bundle/index.html index.html
-          cp /tmp/sspace-bundle/assets/sspace-intro.png assets/sspace-intro.png
-          cp index.html android/app/src/main/assets/index.html
-          cp assets/sspace-intro.png android/app/src/main/assets/assets/sspace-intro.png
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html assets/sspace-intro.png android/app/src/main/assets/index.html android/app/src/main/assets/assets/sspace-intro.png
-          if ! git diff --cached --quiet; then
-            git commit -m "Add original animated SSPACE intro artwork"
-            git push
-          fi
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
