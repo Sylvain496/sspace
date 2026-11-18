@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.provider.Settings;
+import android.webkit.JavascriptInterface;
 import android.os.Bundle;
 import android.webkit.PermissionRequest;
 import android.webkit.ValueCallback;
@@ -23,6 +25,9 @@ public class MainActivity extends Activity {
     private WebView webView;
     private PermissionRequest pendingAudioRequest;
     private ValueCallback<Uri[]> filePathCallback;
+    private String pendingOverlayUserId = "";
+    private String pendingOverlayDisplayName = "";
+    private static final int REQUEST_OVERLAY_PERMISSION = 503;
 
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
@@ -40,6 +45,7 @@ public class MainActivity extends Activity {
         settings.setDisplayZoomControls(false);
         settings.setJavaScriptCanOpenWindowsAutomatically(false);
         webView.setWebViewClient(new WebViewClient());
+        webView.addJavascriptInterface(new NativeBridge(), "SSPACEAndroid");
         webView.setWebChromeClient(new WebChromeClient() {
             @Override public void onPermissionRequest(PermissionRequest request) {
                 runOnUiThread(() -> {
@@ -98,6 +104,47 @@ public class MainActivity extends Activity {
         loadBundledApp();
     }
 
+    private class NativeBridge {
+        @JavascriptInterface public void showFloatingChat(String userId, String displayName) {
+            runOnUiThread(() -> startFloatingChat(userId, displayName));
+        }
+        @JavascriptInterface public boolean canDrawOverlays() {
+            return Build.VERSION.SDK_INT < 23 || Settings.canDrawOverlays(MainActivity.this);
+        }
+    }
+
+    private void startFloatingChat(String userId, String displayName) {
+        if (userId == null || userId.trim().isEmpty()) {
+            Toast.makeText(this, "Ouvre d’abord une conversation.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        pendingOverlayUserId = userId;
+        pendingOverlayDisplayName = displayName == null ? "Discussion" : displayName;
+        if (Build.VERSION.SDK_INT >= 23 && !Settings.canDrawOverlays(this)) {
+            Toast.makeText(this, "Autorise SSPACE à s’afficher par-dessus les autres applications, puis reviens ici.", Toast.LENGTH_LONG).show();
+            Intent settingsIntent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
+            startActivityForResult(settingsIntent, REQUEST_OVERLAY_PERMISSION);
+            return;
+        }
+        launchFloatingService();
+    }
+
+    private void launchFloatingService() {
+        if (pendingOverlayUserId.isEmpty()) return;
+        Intent service = new Intent(this, FloatingChatService.class);
+        service.putExtra(FloatingChatService.EXTRA_OTHER_ID, pendingOverlayUserId);
+        service.putExtra(FloatingChatService.EXTRA_DISPLAY_NAME, pendingOverlayDisplayName);
+        if (Build.VERSION.SDK_INT >= 26) startForegroundService(service); else startService(service);
+        Toast.makeText(this, "Bulle SSPACE activée. Tu peux maintenant changer d’application.", Toast.LENGTH_SHORT).show();
+        pendingOverlayUserId = "";
+        pendingOverlayDisplayName = "";
+    }
+
+    @Override protected void onResume() {
+        super.onResume();
+        if (!pendingOverlayUserId.isEmpty() && (Build.VERSION.SDK_INT < 23 || Settings.canDrawOverlays(this))) launchFloatingService();
+    }
+
     private void loadBundledApp() {
         try (InputStream input = getAssets().open("index.html");
              ByteArrayOutputStream output = new ByteArrayOutputStream()) {
@@ -130,6 +177,11 @@ public class MainActivity extends Activity {
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_OVERLAY_PERMISSION) {
+            if (Build.VERSION.SDK_INT < 23 || Settings.canDrawOverlays(this)) launchFloatingService();
+            else Toast.makeText(this, "L’autorisation est nécessaire pour afficher la bulle hors de SSPACE.", Toast.LENGTH_LONG).show();
+            return;
+        }
         if (requestCode == REQUEST_FILE_PICKER && filePathCallback != null) {
             Uri[] results = null;
             if (resultCode == RESULT_OK && data != null && data.getData() != null) {
