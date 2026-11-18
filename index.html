@@ -442,6 +442,8 @@ body.app-gold .modo-view{color:#f8f0dc}
 .modo-list-item:last-child{border-bottom:0}
 @media(max-width:620px){.modo-grid{grid-template-columns:1fr}.modo-hero{padding:21px}.modo-section{padding:14px}}
 @media(prefers-reduced-motion:reduce){.modo-hero:after,.modo-announcement:before,.modo-announcement.spark{animation:none}}
+
+#modoMembersSection .modo-grid,#modoTeamManageSection .modo-grid{align-items:end}#modoMembersSection .modo-row,#modoTeamManageSection .modo-row{gap:10px}#modoMembersSection [data-modo-select-user],#modoTeamManageSection [data-modo-select-team-user]{margin-left:8px}.modo-member-result{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #393020}.modo-member-result small{display:block;color:#b9b1a0}.modo-history-entry{padding:10px 0;border-bottom:1px solid #393020}.modo-history-entry:last-child{border:0}.modo-permission-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 </style>
 </head>
 <body>
@@ -483,7 +485,7 @@ body.app-gold .modo-view{color:#f8f0dc}
   <button id="modoPublishAnnouncement" class="btn primary" type="button">Publier l’annonce ✦</button>
   <div id="modoAnnouncementsList" class="tiny muted" style="margin-top:15px">Chargement des annonces…</div>
  </section>
- <section class="modo-section"><h2>🛠 Maintenance et anti-spam</h2><p>Les réglages sont réservés à l’administrateur principal.</p>
+ <section class="modo-section" id="modoControlSettingsSection"><h2>🛠 Maintenance et anti-spam</h2><p>Les réglages sont réservés à l’administrateur principal.</p>
   <label class="modo-row"><span>Mode maintenance</span><input id="modoMaintenanceToggle" type="checkbox"></label>
   <label for="modoMaintenanceMessage">Message de maintenance</label><textarea id="modoMaintenanceMessage" class="field" rows="2" maxlength="500"></textarea>
   <label class="modo-row"><span>Anti-spam activé</span><input id="modoAntispamToggle" type="checkbox"></label>
@@ -491,7 +493,36 @@ body.app-gold .modo-view{color:#f8f0dc}
   <button id="modoSaveSettings" class="btn primary" type="button">Enregistrer les réglages</button>
   <p class="tiny muted">Les paramètres sont enregistrés dans la base. Les blocages effectifs (maintenance globale et délais anti-spam) exigent encore les contrôles serveur avant utilisation en production.</p>
  </section>
- <section class="modo-section"><h2>📜 Journal d'activité</h2><div id="modoAuditList" class="tiny muted">Chargement du journal…</div></section>
+ <section class="modo-section" id="modoMembersSection"><h2>👤 Membres et sanctions</h2><p>Recherche par nom d’utilisateur ou nom affiché. Les sanctions sont enregistrées et vérifiées côté serveur.</p>
+  <div class="modo-grid"><input id="modoMemberSearch" class="field" maxlength="40" placeholder="Rechercher un membre…"><button id="modoMemberSearchBtn" class="btn primary" type="button">Rechercher</button></div>
+  <div id="modoMemberSearchResults" class="tiny muted"></div>
+  <div id="modoMemberSelected" class="hidden">
+   <div class="modo-row"><b id="modoMemberSelectedName"></b><span class="modo-pill">MEMBRE SÉLECTIONNÉ</span></div>
+   <label for="modoSanctionType">Action</label><select id="modoSanctionType" class="field"><option value="warning">Avertissement officiel</option><option value="ban">Bannissement temporaire</option></select>
+   <label for="modoSanctionDuration">Durée du bannissement (heures)</label><input id="modoSanctionDuration" class="field" type="number" min="1" max="8760" value="24">
+   <label for="modoSanctionReason">Motif obligatoire</label><textarea id="modoSanctionReason" class="field" rows="3" maxlength="1000" placeholder="Explique clairement le motif de l’intervention…"></textarea>
+   <button id="modoApplySanction" class="btn primary" type="button">Appliquer la sanction</button>
+   <div id="modoMemberHistory" class="tiny muted" style="margin-top:14px">Historique non chargé.</div>
+  </div>
+ </section>
+ <section class="modo-section" id="modoTeamManageSection"><h2>👥 Gestion de l’équipe MODO</h2><p>Ajoute un membre comme modérateur, attribue ses permissions et révoque son accès. Le compte doit se reconnecter pour recevoir son nouveau rôle.</p>
+  <div class="modo-grid"><input id="modoTeamSearch" class="field" maxlength="40" placeholder="Trouver un membre à nommer…"><button id="modoTeamSearchBtn" class="btn primary" type="button">Rechercher</button></div>
+  <div id="modoTeamSearchResults" class="tiny muted"></div>
+  <div id="modoTeamPermissionEditor" class="hidden">
+   <div class="modo-row"><b id="modoTeamSelectedName"></b><span class="modo-pill">NOUVEAU MODO</span></div>
+   <div class="modo-grid">
+    <label class="modo-row"><span>Avertissements</span><input type="checkbox" data-modo-permission="warnings" checked></label>
+    <label class="modo-row"><span>Bannissements</span><input type="checkbox" data-modo-permission="bans"></label>
+    <label class="modo-row"><span>Annonces</span><input type="checkbox" data-modo-permission="announcements" checked></label>
+    <label class="modo-row"><span>Signalements</span><input type="checkbox" data-modo-permission="reports" checked></label>
+    <label class="modo-row"><span>Journal</span><input type="checkbox" data-modo-permission="audit_view"></label>
+    <label class="modo-row"><span>Réglages plateforme</span><input type="checkbox" data-modo-permission="settings_manage"></label>
+   </div>
+   <button id="modoTeamSave" class="btn primary" type="button">Enregistrer le modérateur</button>
+  </div>
+  <div id="modoTeamList" class="tiny muted">Chargement de l’équipe…</div>
+ </section>
+ <section class="modo-section" id="modoAuditSection"><h2>📜 Journal d'activité</h2><div id="modoAuditList" class="tiny muted">Chargement du journal…</div></section>
  <section class="modo-section"><h2>👥 Équipe de modération</h2><p>Vue des rôles enregistrés dans le registre MODO. L’attribution et la révocation des rôles restent réservées aux opérations administratives sécurisées.</p><div id="modoTeamList" class="tiny muted">Chargement de l’équipe…</div></section>
 </section></main><aside class="rightcol"><div class="side rightbox"><h3>Bienvenue sur SSPACE</h3><p class="muted tiny">Un espace pour écrire, lire, commenter et retrouver le plaisir des blogues.</p><div class="tag">Blogues</div><div class="tag">Textes</div><div class="tag">Communauté</div><div class="tag">Gratuit</div><hr style="border-color:#282e49;margin:16px 0"><h3>À savoir</h3><p class="tiny muted">Respecte les autres, protège tes renseignements personnels et partage avec bienveillance.</p></div></aside></div></div>
 <nav class="mobile-nav hidden" id="mobileNav"><button data-view="feed"><span>⌂</span>Accueil</button><button data-view="write"><span>✎</span>Écrire</button><button data-view="messages"><span>✉</span>Messages</button><button data-view="profile"><span>◉</span>Profil</button><button data-view="settings"><span>⚙</span>Compte</button></nav>
@@ -794,29 +825,39 @@ window.addEventListener('pagehide',()=>{if(currentUser)db.from('profiles').updat
 const modoIsStaff=()=>['admin','moderator'].includes(currentUser?.app_metadata?.role);
 const modoIsAdmin=()=>currentUser?.app_metadata?.role==='admin';
 function syncModoAccess(){const item=$('modoMenuItem');if(item)item.classList.toggle('hidden',!modoIsStaff());}
+let modoAccessSnapshot={role:'member',permissions:{}},modoSelectedMember=null,modoSelectedTeamMember=null;
+const modoCan=permission=>modoAccessSnapshot.role==='admin'||modoAccessSnapshot.permissions?.[permission]===true;
 async function loadModoPanel(){
  if(!modoIsStaff())return;
- const [settings,announcements,audit,team]=await Promise.all([
-  db.from('sspace_control_settings').select('*').eq('id',true).maybeSingle(),
-  db.from('sspace_announcements').select('id,title,message,visual_style,animation,is_published,starts_at,ends_at,created_at').order('created_at',{ascending:false}).limit(12),
-  db.from('sspace_admin_audit').select('action,target,details,created_at').order('created_at',{ascending:false}).limit(25),
-  db.from('sspace_moderator_team').select('user_id,role,active,permissions,created_at').order('created_at',{ascending:true})
- ]);
- if(settings.error)toast('Réglages MODO indisponibles : '+settings.error.message);
+ const access=await db.rpc('modo_get_my_access');
+ if(access.error){toast('Vérification des droits MODO impossible.');return}
+ modoAccessSnapshot=access.data||{role:'member',permissions:{}};
+ if(modoAccessSnapshot.role==='member'){toast('Ton accès de modération est inactif. Reconnecte-toi ou contacte l’administrateur.');return}
+ const show=(id,yes)=>$(id)?.classList.toggle('hidden',!yes);
+ show('modoAnnouncementEditor',modoCan('announcements'));
+ show('modoMembersSection',modoCan('warnings')||modoCan('bans'));
+ show('modoTeamManageSection',modoCan('team_manage'));
+ show('modoAuditList',modoCan('audit_view'));
+ const settingsTask=modoCan('settings_manage')?db.from('sspace_control_settings').select('*').eq('id',true).maybeSingle():Promise.resolve({data:null,error:null});
+ const announcementTask=modoCan('announcements')?db.from('sspace_announcements').select('id,title,message,visual_style,animation,is_published,starts_at,ends_at,created_at').order('created_at',{ascending:false}).limit(12):Promise.resolve({data:[],error:null});
+ const auditTask=modoCan('audit_view')?db.rpc('modo_list_audit',{p_limit:25}):Promise.resolve({data:[],error:null});
+ const teamTask=modoCan('team_manage')?db.rpc('modo_list_moderators'):Promise.resolve({data:[],error:null});
+ const [settings,announcements,audit,team]=await Promise.all([settingsTask,announcementTask,auditTask,teamTask]);
+ show('modoControlSettingsSection',modoCan('settings_manage'));
+ show('modoAuditSection',modoCan('audit_view'));
+ show('modoTeamManageSection',modoCan('team_manage'));
  const s=settings.data||{};
  $('modoMaintenanceStatus').textContent=s.maintenance_enabled?'MAINTENANCE ACTIVE':'MAINTENANCE INACTIVE';
- $('modoAntispamStatus').textContent=s.antispam_enabled?'ANTI-SPAM CONFIGURÉ':'ANTI-SPAM DÉSACTIVÉ';
- ['modoMaintenanceToggle','modoAntispamToggle','modoMaintenanceMessage','modoPostCooldown','modoMessageCooldown'].forEach(id=>$(id).disabled=!modoIsAdmin());
- $('modoSaveSettings').disabled=!modoIsAdmin();
- $('modoMaintenanceToggle').checked=!!s.maintenance_enabled;$('modoAntispamToggle').checked=s.antispam_enabled!==false;
- $('modoMaintenanceMessage').value=s.maintenance_message||'';
- $('modoPostCooldown').value=s.post_cooldown_seconds||20;$('modoMessageCooldown').value=s.message_cooldown_seconds||2;
+ $('modoAntispamStatus').textContent=s.antispam_enabled?'ANTI-SPAM ACTIF':'ANTI-SPAM DÉSACTIVÉ';
+ ['modoMaintenanceToggle','modoAntispamToggle','modoMaintenanceMessage','modoPostCooldown','modoMessageCooldown'].forEach(id=>{if($(id))$(id).disabled=!modoCan('settings_manage')});
+ if($('modoSaveSettings'))$('modoSaveSettings').disabled=!modoCan('settings_manage');
+ if(s){$('modoMaintenanceToggle').checked=!!s.maintenance_enabled;$('modoAntispamToggle').checked=s.antispam_enabled!==false;$('modoMaintenanceMessage').value=s.maintenance_message||'';$('modoPostCooldown').value=s.post_cooldown_seconds||20;$('modoMessageCooldown').value=s.message_cooldown_seconds||2}
  const rows=announcements.data||[];
  $('modoAnnouncementsList').innerHTML=announcements.error?'<p>Impossible de charger les annonces.</p>':rows.length?rows.map(x=>'<div class="modo-list-item"><b>'+esc(x.title)+'</b><div class="tiny muted">'+(x.is_published?'Publiée':'Brouillon')+' · '+esc(x.animation)+' · '+new Date(x.created_at).toLocaleString('fr-CA')+'</div><button type="button" class="btn" data-modo-ann-toggle="'+x.id+'" data-next="'+(!x.is_published)+'">'+(x.is_published?'Dépublier':'Publier')+'</button></div>').join(''):'Aucune annonce pour le moment.';
- $('modoAuditList').innerHTML=audit.error?'<p>Journal indisponible (accès administrateur requis).</p>':(audit.data||[]).map(x=>'<div class="modo-list-item"><b>'+esc(x.action)+'</b><div class="tiny muted">'+new Date(x.created_at).toLocaleString('fr-CA')+' · '+esc(x.target||'Plateforme')+'</div></div>').join('')||'Aucune intervention enregistrée.';
- $('modoTeamList').innerHTML=team.error?'<p>Registre privé (accès administrateur requis).</p>':(team.data||[]).map(x=>'<div class="modo-list-item"><b>'+esc(x.role.toUpperCase())+'</b> <span class="modo-pill">'+(x.active?'ACTIF':'INACTIF')+'</span><div class="tiny muted">'+esc(x.user_id.slice(0,8))+'…</div></div>').join('')||'Aucun membre dans le registre.';
+ $('modoAuditList').innerHTML=audit.error?'<p>Journal indisponible.</p>':(audit.data||[]).map(x=>'<div class="modo-list-item"><b>'+esc(x.action)+'</b><div class="tiny muted">'+new Date(x.created_at).toLocaleString('fr-CA')+' · '+esc(x.target||'Plateforme')+'</div></div>').join('')||'Aucune intervention enregistrée.';
+ $('modoTeamList').innerHTML=team.error?'<p>Registre de l’équipe indisponible.</p>':(team.data||[]).map(x=>'<div class="modo-list-item"><b>@'+esc(x.username||x.display_name||x.user_id.slice(0,8))+'</b> <span class="modo-pill">'+(x.active?'ACTIF':'INACTIF')+'</span><div class="tiny muted">'+esc(x.role)+' · '+esc(Object.entries(x.permissions||{}).filter(([,v])=>v).map(([k])=>k).join(', '))+'</div>'+(x.active?'<button class="btn" type="button" data-modo-team-revoke="'+x.user_id+'">Révoquer l’accès</button>':'')+'</div>').join('')||'Aucun modérateur enregistré.';
 }
-async function modoAudit(action,target,details={}){const {error}=await db.from('sspace_admin_audit').insert({actor_id:currentUser.id,action,target,details});if(error)console.warn('MODO audit insert failed',error.message)}
+async function modoAudit(){/* Les événements sont consignés par les fonctions et déclencheurs SQL sécurisés. */}
 $('modoPublishAnnouncement').onclick=async()=>{
  if(!modoIsStaff())return toast('Accès refusé.');
  const title=$('modoAnnouncementTitle').value.trim(),message=$('modoAnnouncementMessage').value.trim();
@@ -844,6 +885,57 @@ document.addEventListener('click',async e=>{
  await modoAudit(next?'announcement_published':'announcement_unpublished',id);await loadModoPanel();await loadLiveAnnouncements();
 });
 document.querySelectorAll('[data-modo-jump]').forEach(b=>b.addEventListener('click',()=>$(b.dataset.modoJump)?.scrollIntoView({behavior:'smooth',block:'start'})));
+
+async function modoFindMembers(inputId,hostId,buttonId,selectAttr){
+ const query=$(inputId).value.trim();if(query.length<2)return toast('Entre au moins 2 caractères.');
+ const btn=$(buttonId);btn.disabled=true;
+ const {data,error}=await db.rpc('modo_search_members',{p_query:query});btn.disabled=false;
+ if(error){$(hostId).textContent='Recherche impossible : '+error.message;return}
+ $(hostId).innerHTML=(data||[]).map(p=>'<div class="modo-member-result"><span><b>'+esc(p.display_name||p.username)+'</b><small>@'+esc(p.username||'')+'</small></span><button type="button" class="btn" '+selectAttr+'="'+p.user_id+'" data-name="'+esc(p.display_name||p.username)+'" data-username="'+esc(p.username||'')+'">Sélectionner</button></div>').join('')||'Aucun membre trouvé.';
+}
+$('modoMemberSearchBtn').onclick=()=>modoFindMembers('modoMemberSearch','modoMemberSearchResults','modoMemberSearchBtn','data-modo-select-user');
+$('modoTeamSearchBtn').onclick=()=>modoFindMembers('modoTeamSearch','modoTeamSearchResults','modoTeamSearchBtn','data-modo-select-team-user');
+async function modoLoadMemberHistory(){
+ if(!modoSelectedMember)return;
+ const {data,error}=await db.rpc('modo_user_history',{p_user_id:modoSelectedMember.id});
+ if(error){$('modoMemberHistory').textContent='Historique indisponible : '+error.message;return}
+ const actions=data?.actions||[],suspensions=data?.suspensions||[];
+ $('modoMemberHistory').innerHTML='<h3>Historique des interventions</h3>'+(actions.map(x=>'<div class="modo-history-entry"><b>'+esc(x.action_type.toUpperCase())+'</b> · '+new Date(x.created_at).toLocaleString('fr-CA')+'<p>'+esc(x.reason)+'</p>'+(x.duration_hours?'<small>Durée : '+x.duration_hours+' h · Fin : '+new Date(x.expires_at).toLocaleString('fr-CA')+'</small>':'')+'</div>').join('')||'<p>Aucune intervention enregistrée.</p>')+'<h3>Suspensions</h3>'+(suspensions.map(x=>'<div class="modo-history-entry">'+(x.active?'<span class="modo-pill">ACTIVE</span>':'<span class="modo-pill">TERMINÉE</span>')+' Fin : '+new Date(x.expires_at).toLocaleString('fr-CA')+(x.active&&modoCan('bans')?' <button class="btn" type="button" data-modo-unban="'+x.id+'">Lever le bannissement</button>':'')+'</div>').join('')||'<p>Aucune suspension.</p>');
+}
+document.addEventListener('click',async e=>{
+ const member=e.target.closest('[data-modo-select-user]');
+ if(member){if(!modoCan('warnings')&&!modoCan('bans'))return toast('Permission refusée.');modoSelectedMember={id:member.dataset.modoSelectUser,name:member.dataset.name,username:member.dataset.username};$('modoMemberSelectedName').textContent=modoSelectedMember.name+' · @'+modoSelectedMember.username;$('modoMemberSelected').classList.remove('hidden');$('modoSanctionType').querySelector('option[value="warning"]').disabled=!modoCan('warnings');$('modoSanctionType').querySelector('option[value="ban"]').disabled=!modoCan('bans');$('modoSanctionType').value=modoCan('warnings')?'warning':'ban';await modoLoadMemberHistory();return}
+ const teamMember=e.target.closest('[data-modo-select-team-user]');
+ if(teamMember){if(!modoCan('team_manage'))return toast('Accès administrateur requis.');modoSelectedTeamMember={id:teamMember.dataset.modoSelectTeamUser,name:teamMember.dataset.name};$('modoTeamSelectedName').textContent=modoSelectedTeamMember.name;$('modoTeamPermissionEditor').classList.remove('hidden');return}
+ const revoke=e.target.closest('[data-modo-team-revoke]');
+ if(revoke){if(!modoCan('team_manage'))return toast('Accès refusé.');if(!confirm('Révoquer les permissions de ce modérateur?'))return;revoke.disabled=true;const {error}=await db.rpc('modo_set_moderator',{p_user_id:revoke.dataset.modoTeamRevoke,p_active:false,p_permissions:null});if(error){revoke.disabled=false;return toast('Révocation impossible : '+error.message)}toast('Accès du modérateur révoqué. Il devra renouveler sa session.');await loadModoPanel();return}
+ const unban=e.target.closest('[data-modo-unban]');
+ if(unban){if(!modoCan('bans'))return toast('Permission bannissement refusée.');unban.disabled=true;const {error}=await db.rpc('modo_revoke_ban',{p_suspension_id:unban.dataset.modoUnban,p_reason:'Suspension levée après révision par la modération'});if(error){unban.disabled=false;return toast('Levée impossible : '+error.message)}toast('Bannissement levé.');await modoLoadMemberHistory();return}
+});
+$('modoApplySanction').onclick=async()=>{
+ if(!modoSelectedMember)return toast('Sélectionne un membre.');
+ const type=$('modoSanctionType').value,reason=$('modoSanctionReason').value.trim();
+ if(!reason||reason.length<3)return toast('Un motif de 3 caractères minimum est obligatoire.');
+ if(type==='warning'&&!modoCan('warnings'))return toast('Permission avertissement refusée.');
+ if(type==='ban'&&!modoCan('bans'))return toast('Permission bannissement refusée.');
+ const hours=type==='ban'?Number($('modoSanctionDuration').value):null;
+ if(type==='ban'&&(!Number.isInteger(hours)||hours<1||hours>8760))return toast('La durée doit être comprise entre 1 et 8760 heures.');
+ const btn=$('modoApplySanction');btn.disabled=true;
+ const {error}=await db.rpc('modo_issue_action',{p_target_user_id:modoSelectedMember.id,p_action_type:type,p_reason:reason,p_duration_hours:hours});
+ btn.disabled=false;if(error)return toast('Sanction refusée : '+error.message);
+ $('modoSanctionReason').value='';toast(type==='warning'?'Avertissement envoyé.':'Bannissement temporaire appliqué.');await modoLoadMemberHistory();
+};
+$('modoSanctionType').addEventListener('change',()=>{$('modoSanctionDuration').disabled=$('modoSanctionType').value!=='ban'});
+$('modoTeamSave').onclick=async()=>{
+ if(!modoCan('team_manage')||!modoSelectedTeamMember)return toast('Sélectionne un membre.');
+ const permissions={};document.querySelectorAll('[data-modo-permission]').forEach(x=>permissions[x.dataset.modoPermission]=x.checked);
+ if(!Object.values(permissions).some(Boolean))return toast('Attribue au moins une permission.');
+ const btn=$('modoTeamSave');btn.disabled=true;
+ const {data,error}=await db.rpc('modo_set_moderator',{p_user_id:modoSelectedTeamMember.id,p_active:true,p_permissions:permissions});
+ btn.disabled=false;if(error)return toast('Attribution impossible : '+error.message);
+ modoSelectedTeamMember=null;$('modoTeamPermissionEditor').classList.add('hidden');toast('Modérateur enregistré. Il doit se déconnecter puis se reconnecter.');await loadModoPanel();
+};
+
 async function loadLiveAnnouncements(){
  const host=$('liveAnnouncementDisplay');if(!host)return;
  const {data,error}=await db.from('sspace_announcements').select('id,title,message,visual_style,animation,show_on_login,created_at').eq('is_published',true).eq('show_on_login',true).lte('starts_at',new Date().toISOString()).or('ends_at.is.null,ends_at.gt.'+new Date().toISOString()).order('created_at',{ascending:false}).limit(3);
