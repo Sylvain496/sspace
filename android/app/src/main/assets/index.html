@@ -489,7 +489,7 @@ body.app-gold .modo-view{color:#f8f0dc}
   <label class="modo-row"><span>Anti-spam activé</span><input id="modoAntispamToggle" type="checkbox"></label>
   <div class="modo-grid"><div><label for="modoPostCooldown">Délai entre publications (secondes)</label><input id="modoPostCooldown" class="field" type="number" min="5" max="3600"></div><div><label for="modoMessageCooldown">Délai entre messages (secondes)</label><input id="modoMessageCooldown" class="field" type="number" min="1" max="120"></div></div>
   <button id="modoSaveSettings" class="btn primary" type="button">Enregistrer les réglages</button>
-  <p class="tiny muted">Les paramètres sont enregistrés dans la base. L’application des blocages globaux côté serveur doit être finalisée avant d’activer ces protections en production.</p>
+  <p class="tiny muted">Les paramètres sont enregistrés dans la base. Les blocages effectifs (maintenance globale et délais anti-spam) exigent encore les contrôles serveur avant utilisation en production.</p>
  </section>
  <section class="modo-section"><h2>📜 Journal d'activité</h2><div id="modoAuditList" class="tiny muted">Chargement du journal…</div></section>
  <section class="modo-section"><h2>👥 Équipe de modération</h2><p>Vue des rôles enregistrés dans le registre MODO. L’attribution et la révocation des rôles restent réservées aux opérations administratives sécurisées.</p><div id="modoTeamList" class="tiny muted">Chargement de l’équipe…</div></section>
@@ -846,9 +846,9 @@ document.addEventListener('click',async e=>{
 document.querySelectorAll('[data-modo-jump]').forEach(b=>b.addEventListener('click',()=>$(b.dataset.modoJump)?.scrollIntoView({behavior:'smooth',block:'start'})));
 async function loadLiveAnnouncements(){
  const host=$('liveAnnouncementDisplay');if(!host)return;
- const {data,error}=await db.from('sspace_announcements').select('id,title,message,visual_style,animation,show_on_login,created_at').eq('is_published',true).lte('starts_at',new Date().toISOString()).or('ends_at.is.null,ends_at.gt.'+new Date().toISOString()).order('created_at',{ascending:false}).limit(3);
+ const {data,error}=await db.from('sspace_announcements').select('id,title,message,visual_style,animation,show_on_login,created_at').eq('is_published',true).eq('show_on_login',true).lte('starts_at',new Date().toISOString()).or('ends_at.is.null,ends_at.gt.'+new Date().toISOString()).order('created_at',{ascending:false}).limit(3);
  if(error||!data?.length){host.innerHTML='';host.classList.add('hidden');return}
- const visible=data.filter(x=>x.show_on_login||!sessionStorage.getItem('sspace-ann-'+x.id));
+ const visible=data.filter(x=>!sessionStorage.getItem('sspace-seen-ann-'+x.id));visible.forEach(x=>sessionStorage.setItem('sspace-seen-ann-'+x.id,'1'));
  host.innerHTML=visible.map(x=>'<article class="modo-announcement '+esc(x.animation)+'"><span class="modo-pill">✦ SSPACE OFFICIEL</span><h2>'+esc(x.title)+'</h2><p>'+esc(x.message)+'</p><button type="button" class="btn" data-modo-dismiss="'+x.id+'">Compris</button></article>').join('');
  host.classList.toggle('hidden',!visible.length);
 }
