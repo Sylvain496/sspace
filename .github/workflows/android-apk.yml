@@ -8,7 +8,7 @@ on:
       - 'index.html'
       - '.github/workflows/android-apk.yml'
   push:
-    branches: [main]
+    branches: [main, feature/android-floating-chat-overlay]
     paths:
       - 'android/**'
       - 'index.html'
