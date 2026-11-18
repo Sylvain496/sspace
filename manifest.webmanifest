@@ -1,1 +1,1 @@
-{"name":"SSPACE","short_name":"SSPACE","description":"Tes textes, tes blogues, ta communauté.","start_url":"./","display":"standalone","background_color":"#080a15","theme_color":"#090b18","lang":"fr-CA","orientation":"portrait"}
+{"name":"SSPACE","short_name":"SSPACE","description":"Tes textes, tes blogues, ta communauté.","start_url":"./","display":"standalone","background_color":"#080a15","theme_color":"#090b18","lang":"fr-CA","orientation":"portrait","icons":[{"src":"./icons/sspace-icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]}

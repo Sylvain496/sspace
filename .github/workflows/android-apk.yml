@@ -1,8 +1,14 @@
 name: Build Android APK
 on:
   workflow_dispatch:
-  push:
+  pull_request:
     branches: [main]
+    paths:
+      - 'android/**'
+      - 'index.html'
+      - '.github/workflows/android-apk.yml'
+  push:
+    branches: [main, feature/android-floating-chat-overlay]
     paths:
       - 'android/**'
       - 'index.html'
