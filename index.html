@@ -1340,9 +1340,9 @@ async function connectLiveRoom(roomName,role,hostId){
  if(role==='host'||role==='cohost'){await liveKitRoom.localParticipant.setCameraEnabled(true);await liveKitRoom.localParticipant.setMicrophoneEnabled(true);liveActiveRole=role;}
  updateLiveViewerCount();$('liveStatePill').textContent=role==='host'?'● EN DIRECT':'● EN TRAIN DE REGARDER';
  $('liveStage').classList.add('camera-on');
- if(role==='host'){
+ if(role==='host'||role==='cohost'){
   const pub=liveKitRoom.localParticipant.getTrackPublication(kit.Track.Source.Camera);
-  if(pub?.track){const el=pub.track.attach();el.autoplay=true;el.playsInline=true;el.muted=true;el.className='live-remote-video';$('liveStage').appendChild(el)}
+  if(pub?.track){const el=pub.track.attach();el.autoplay=true;el.playsInline=true;el.muted=true;el.className='live-remote-video';el.dataset.liveLocalPreview='true';$('liveStage').appendChild(el)}
   $('liveStartBroadcast').disabled=true;$('liveStopBroadcast').disabled=false;
  }else{$('liveStartBroadcast').disabled=true;$('liveStopBroadcast').disabled=false}
 }
