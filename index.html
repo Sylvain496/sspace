@@ -611,7 +611,7 @@ body.app-light .topin>.brand{filter:drop-shadow(0 2px 0 #8a571d33) drop-shadow(0
 
 .online-member-actions-card{width:min(360px,calc(100vw - 32px));padding:20px;background:linear-gradient(145deg,#171f39,#101629);border:1px solid #46547c;box-shadow:0 24px 70px #0009}.online-member-actions-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.online-member-actions-head b{font-size:17px}.online-member-action-buttons{display:grid;gap:10px;margin-top:16px}.online-member-action-buttons .btn{width:100%;justify-content:center;padding:12px}.online-user{cursor:pointer}.online-user:focus-visible{outline:2px solid #ffc65c;outline-offset:3px}
 /* SSPACE LIVE studio */
-.live-studio{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(250px,.8fr);gap:15px}
+.live-room-card{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding:10px 0;border-bottom:1px solid var(--line)}.live-room-card:last-child{border-bottom:0}.live-room-card .tiny{flex-basis:100%}.live-remote-video{width:100%;height:100%;object-fit:cover;border-radius:16px;position:absolute;inset:0}.live-studio{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(250px,.8fr);gap:15px}
 .live-stage{position:relative;min-height:390px;border:1px solid #39466f;border-radius:20px;overflow:hidden;background:radial-gradient(ellipse at 50% 20%,#293d76,#090d1b 70%);display:grid;place-items:center}
 .live-stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1);display:none}
 .live-stage.camera-on video{display:block}
@@ -1325,9 +1325,9 @@ async function respondLiveInvite(id,roomId,decision){
  toast(decision==='accepted'?'Invitation acceptée! Ouvre le direct pour rejoindre la scène.':'Invitation refusée.');
  await loadIncomingLiveInvites();await loadLiveRooms();
 }
-async function liveKitModule(){if(!liveClientModule)liveClientModule=await import('https://esm.sh/livekit-client@2.15.6');return liveClientModule}
+if(currentUser){db.channel('live-invites-user-'+currentUser.id).on('postgres_changes',{event:'*',schema:'public',table:'live_cohost_invites',filter:'invited_user_id=eq.'+currentUser.id},()=>loadIncomingLiveInvites()).subscribe()}\nasync function liveKitModule(){if(!liveClientModule)liveClientModule=await import('https://esm.sh/livekit-client@2.15.6');return liveClientModule}
 async function requestLiveToken(roomName,role){const {data,error}=await db.functions.invoke('livekit-token',{body:{roomName,role}});if(error)throw new Error(data?.error||error.message);if(data?.error)throw new Error(data.error);return data}
-function updateLiveViewerCount(){const count=liveKitRoom?liveKitRoom.remoteParticipants.size+1:0;$('liveViewerCount').textContent=String(count);$('liveViewerStat').textContent=String(count)}
+function updateLiveViewerCount(){const count=liveKitRoom?liveKitRoom.remoteParticipants.size:0;$('liveViewerCount').textContent=String(count);$('liveViewerStat').textContent=String(count)}
 async function connectLiveRoom(roomName,role,hostId){
  const kit=await liveKitModule();const auth=await requestLiveToken(roomName,role);
  liveKitRoom=new kit.Room({adaptiveStream:true,dynacast:true});
