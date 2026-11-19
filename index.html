@@ -1321,7 +1321,7 @@ async function loadIncomingLiveInvites(){
 async function respondLiveInvite(id,roomId,decision){
  const {error}=await db.from('live_cohost_invites').update({status:decision,updated_at:new Date().toISOString()}).eq('id',id);
  if(error){toast('Réponse impossible : '+error.message);return}
- if(decision==='accepted'){const {error:roomError}=await db.from('live_rooms').update({cohost_user_id:currentUser.id}).eq('id',roomId).eq('status','live');if(roomError)toast('Invitation acceptée, mais le direct a peut-être pris fin.')}
+ if(decision==='accepted'){toast('Tu peux maintenant rejoindre la scène depuis la liste des directs.')}
  toast(decision==='accepted'?'Invitation acceptée! Ouvre le direct pour rejoindre la scène.':'Invitation refusée.');
  await loadIncomingLiveInvites();await loadLiveRooms();
 }
