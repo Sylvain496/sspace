@@ -756,13 +756,13 @@ body.app-light .topin>.brand{filter:drop-shadow(0 2px 0 #8a571d33) drop-shadow(0
  </section>
  <section class="modo-section" id="modoAuditSection"><h2>📜 Journal d'activité</h2><div id="modoAuditList" class="tiny muted">Chargement du journal…</div></section>
  
-</section></main><aside class="rightcol"><div class="side rightbox"><h3>Bienvenue sur SSPACE</h3><p class="muted tiny">Un espace pour écrire, lire, commenter et retrouver le plaisir des blogues.</p><div class="tag">Blogues</div><div class="tag">Textes</div><div class="tag">Communauté</div><div class="tag">Gratuit</div><hr style="border-color:#282e49;margin:16px 0"><h3>À savoir</h3><p class="tiny muted">Respecte les autres, protège tes renseignements personnels et partage avec bienveillance.</p></div></aside></div></div>
+</section></main><aside class="rightcol"><div class="side rightbox"><h3>Bienvenue sur SSPACE</h3><p class="muted tiny">Un espace pour écrire, lire, commenter et retrouver le plaisir des blogues.</p><div class="tag">Blogues</div><div class="tag">Textes</div><div class="tag">Communauté</div><div class="tag">Gratuit</div><hr style="border-color:#282e49;margin:16px 0"><h3>À savoir</h3><p class="tiny muted">Respecte les autres, protège tes renseignements personnels et partage avec bienveillance.</p></div></aside></div><div id="privateCallOverlay" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-label="Appel vidéo SSPACE"><div class="modal-card" style="max-width:560px;width:94%"><div class="post-head"><div class="avatar">📹</div><div style="flex:1"><b id="privateCallTitle">Appel vidéo</b><div id="privateCallStatus" class="tiny muted">Connexion…</div></div><button type="button" class="btn" id="privateCallClose">✕</button></div><div id="privateCallStage" style="position:relative;min-height:260px;background:#080b14;border-radius:14px;overflow:hidden;margin:12px 0"><video id="privateCallRemote" autoplay playsinline style="width:100%;height:100%;object-fit:cover;min-height:260px"></video><video id="privateCallLocal" autoplay playsinline muted style="position:absolute;right:10px;bottom:10px;width:30%;max-height:150px;object-fit:cover;border:2px solid #fff;border-radius:10px"></video></div><div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button type="button" class="btn" id="privateCallMute">🎙 Couper micro</button><button type="button" class="btn" id="privateCallCamera">📷 Caméra</button><button type="button" class="btn" id="privateCallEnd" style="background:#b4233b;color:#fff">Raccrocher</button></div></div></div>
 
 <div id="messageLauncher" class="message-launcher hidden" aria-label="Messagerie instantanée">
  <div class="message-launcher-head"><div><b>Messages SSPACE</b><div class="tiny muted" id="launcherOnlineCount">Membres connectés</div></div><button type="button" class="btn" id="closeMessageLauncher" aria-label="Fermer">✕</button></div>
  <div id="launcherPeople" class="message-launcher-list"><div class="tiny muted" style="padding:12px">Chargement des membres connectés…</div></div>
  <div id="launcherChat" class="launcher-chat hidden">
-  <div class="launcher-chat-head"><button type="button" class="btn" id="launcherBack">‹</button><button type="button" class="btn" id="activateAndroidBubble" title="Garder cette conversation en bulle flottante">◉ Bulle</button><div id="launcherChatAvatar" class="avatar">S</div><div style="min-width:0;flex:1"><b id="launcherChatName">Conversation</b><div id="launcherChatStatus" class="tiny muted"></div></div><div class="chat-more-wrap"><button type="button" class="btn chat-more-trigger" data-chat-more="launcherMoreMenu" aria-label="Plus d’options">···</button><div id="launcherMoreMenu" class="chat-more-menu hidden"><button type="button" data-chat-personalize="launcherTypographyPanel">✎ Personnaliser l’écriture</button></div><div id="launcherTypographyPanel" class="chat-typography-panel hidden"><b>Personnaliser l’écriture</b><div class="typography-label">Style de saisie · 6 choix gratuits</div><div class="typography-styles"><button type="button" class="typography-style" data-chat-style="classic">Classique</button><button type="button" class="typography-style" data-chat-style="serif">Sérif</button><button type="button" class="typography-style" data-chat-style="rounded">Arrondi</button><button type="button" class="typography-style" data-chat-style="typewriter">Machine</button><button type="button" class="typography-style" data-chat-style="elegant">Élégant</button><button type="button" class="typography-style" data-chat-style="pixel">Pixel</button></div><div class="typography-label">Couleur du texte</div><div class="typography-colors"><button type="button" class="typography-color" data-chat-color="#f4f6ff" style="--swatch:#f4f6ff" aria-label="Blanc" title="Blanc"></button><button type="button" class="typography-color" data-chat-color="#70d7ff" style="--swatch:#70d7ff" aria-label="Bleu" title="Bleu"></button><button type="button" class="typography-color" data-chat-color="#b99aff" style="--swatch:#b99aff" aria-label="Violet" title="Violet"></button><button type="button" class="typography-color" data-chat-color="#ff8fcf" style="--swatch:#ff8fcf" aria-label="Rose" title="Rose"></button><button type="button" class="typography-color" data-chat-color="#8fe3b0" style="--swatch:#8fe3b0" aria-label="Menthe" title="Menthe"></button><button type="button" class="typography-color" data-chat-color="#ffd36e" style="--swatch:#ffd36e" aria-label="Doré" title="Doré"></button><button type="button" class="typography-color" data-chat-color="#ff8a8a" style="--swatch:#ff8a8a" aria-label="Corail" title="Corail"></button></div><p class="tiny muted">Tes choix sont enregistrés pour cette conversation.</p></div></div><button type="button" class="btn" id="launcherCloseChat">✕</button></div>
+  <div class="launcher-chat-head"><button type="button" class="btn" id="launcherBack">‹</button><button type="button" class="btn" id="activateAndroidBubble" title="Garder cette conversation en bulle flottante">◉ Bulle</button><div id="launcherChatAvatar" class="avatar">S</div><div style="min-width:0;flex:1"><b id="launcherChatName">Conversation</b><div id="launcherChatStatus" class="tiny muted"></div></div><button type="button" class="btn" id="launcherVideoCall" title="Appel vidéo">📹</button><div class="chat-more-wrap"><button type="button" class="btn chat-more-trigger" data-chat-more="launcherMoreMenu" aria-label="Plus d’options">···</button><div id="launcherMoreMenu" class="chat-more-menu hidden"><button type="button" data-chat-personalize="launcherTypographyPanel">✎ Personnaliser l’écriture</button></div><div id="launcherTypographyPanel" class="chat-typography-panel hidden"><b>Personnaliser l’écriture</b><div class="typography-label">Style de saisie · 6 choix gratuits</div><div class="typography-styles"><button type="button" class="typography-style" data-chat-style="classic">Classique</button><button type="button" class="typography-style" data-chat-style="serif">Sérif</button><button type="button" class="typography-style" data-chat-style="rounded">Arrondi</button><button type="button" class="typography-style" data-chat-style="typewriter">Machine</button><button type="button" class="typography-style" data-chat-style="elegant">Élégant</button><button type="button" class="typography-style" data-chat-style="pixel">Pixel</button></div><div class="typography-label">Couleur du texte</div><div class="typography-colors"><button type="button" class="typography-color" data-chat-color="#f4f6ff" style="--swatch:#f4f6ff" aria-label="Blanc" title="Blanc"></button><button type="button" class="typography-color" data-chat-color="#70d7ff" style="--swatch:#70d7ff" aria-label="Bleu" title="Bleu"></button><button type="button" class="typography-color" data-chat-color="#b99aff" style="--swatch:#b99aff" aria-label="Violet" title="Violet"></button><button type="button" class="typography-color" data-chat-color="#ff8fcf" style="--swatch:#ff8fcf" aria-label="Rose" title="Rose"></button><button type="button" class="typography-color" data-chat-color="#8fe3b0" style="--swatch:#8fe3b0" aria-label="Menthe" title="Menthe"></button><button type="button" class="typography-color" data-chat-color="#ffd36e" style="--swatch:#ffd36e" aria-label="Doré" title="Doré"></button><button type="button" class="typography-color" data-chat-color="#ff8a8a" style="--swatch:#ff8a8a" aria-label="Corail" title="Corail"></button></div><p class="tiny muted">Tes choix sont enregistrés pour cette conversation.</p></div></div><button type="button" class="btn" id="launcherCloseChat">✕</button></div>
   <div id="launcherMessages" class="launcher-chat-messages"></div>
   <div class="launcher-tools"><label class="btn" for="launcherPhoto">Photo ou vidéo</label><input id="launcherPhoto" type="file" accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime" hidden><button type="button" class="btn" id="launcherMic">Message vocal</button><span id="launcherRecordStatus" class="chat-recording"></span></div>
   <form id="launcherSendForm" class="launcher-chat-compose"><textarea id="launcherInput" class="field" rows="1" maxlength="5000" placeholder="Écrire un message…"></textarea><button class="btn primary" type="submit">➤</button></form>
@@ -1325,7 +1325,68 @@ async function respondLiveInvite(id,roomId,decision){
  toast(decision==='accepted'?'Invitation acceptée! Ouvre le direct pour rejoindre la scène.':'Invitation refusée.');
  await loadIncomingLiveInvites();await loadLiveRooms();
 }
-if(currentUser){db.channel('live-invites-user-'+currentUser.id).on('postgres_changes',{event:'*',schema:'public',table:'live_cohost_invites',filter:'invited_user_id=eq.'+currentUser.id},()=>loadIncomingLiveInvites()).subscribe()}\nasync function liveKitModule(){if(!liveClientModule)liveClientModule=await import('https://esm.sh/livekit-client@2.15.6');return liveClientModule}
+if(currentUser){db.channel('live-invites-user-'+currentUser.id).on('postgres_changes',{event:'*',schema:'public',table:'live_cohost_invites',filter:'invited_user_id=eq.'+currentUser.id},()=>loadIncomingLiveInvites()).subscribe()}\n
+/* SSPACE private video calls */
+let privateCallRoom=null,privateCallRow=null,privateCallPoll=null,privateCallMuted=false,privateCallCameraOn=true,privateCallChannel=null;
+function setPrivateCallStatus(t){const n=$('privateCallStatus');if(n)n.textContent=t}
+function closePrivateCallUi(){ $('privateCallOverlay').classList.add('hidden'); $('privateCallRemote').srcObject=null; $('privateCallLocal').srcObject=null; }
+async function endPrivateCall(update=true){
+ if(privateCallPoll){clearInterval(privateCallPoll);privateCallPoll=null}
+ if(privateCallChannel){try{await db.removeChannel(privateCallChannel)}catch(_){}privateCallChannel=null}
+ if(privateCallRoom){try{await privateCallRoom.disconnect()}catch(_){}privateCallRoom=null}
+ if(update&&privateCallRow){await db.from('private_video_calls').update({status:'ended',ended_at:new Date().toISOString()}).eq('id',privateCallRow.id)}
+ privateCallRow=null;closePrivateCallUi();
+}
+async function connectPrivateCall(row){
+ const kit=await liveKitModule();
+ const {data,error}=await db.functions.invoke('livekit-token',{body:{roomName:row.room_name,role:'private_call'}});
+ if(error||!data?.token)throw new Error(data?.error||error?.message||'Jeton d’appel indisponible.');
+ privateCallRoom=new kit.Room({adaptiveStream:true,dynacast:true});
+ privateCallRoom.on(kit.RoomEvent.TrackSubscribed,(track)=>{const el=track.attach();el.autoplay=true;el.playsInline=true;if(track.kind==='video')$('privateCallRemote').replaceWith(el),el.id='privateCallRemote';else if(track.kind==='audio')document.body.appendChild(el)});
+ privateCallRoom.on(kit.RoomEvent.TrackUnsubscribed,track=>track.detach().forEach(el=>el.remove()));
+ await privateCallRoom.connect(data.serverUrl,data.token);
+ await privateCallRoom.localParticipant.setCameraEnabled(true);
+ await privateCallRoom.localParticipant.setMicrophoneEnabled(true);
+ const pub=privateCallRoom.localParticipant.getTrackPublication(kit.Track.Source.Camera);
+ if(pub?.track){const el=pub.track.attach();el.autoplay=true;el.playsInline=true;el.muted=true;$('privateCallLocal').replaceWith(el);el.id='privateCallLocal'}
+ setPrivateCallStatus('Appel connecté');
+}
+async function startPrivateVideoCall(){
+ if(!currentUser||!launcherOtherUser)return toast('Ouvre une conversation avant d’appeler.');
+ try{
+  const roomName='sspace_call_'+crypto.randomUUID().replaceAll('-','').slice(0,24);
+  const {data,error}=await db.from('private_video_calls').insert({caller_id:currentUser.id,callee_id:launcherOtherUser,room_name:roomName,status:'ringing'}).select().single();
+  if(error)throw error;privateCallRow=data;
+  $('privateCallTitle').textContent='Appel vidéo — '+$('launcherChatName').textContent;
+  $('privateCallOverlay').classList.remove('hidden');setPrivateCallStatus('Sonnerie en cours…');
+  await connectPrivateCall(data);
+  privateCallPoll=setInterval(async()=>{const {data:latest}=await db.from('private_video_calls').select('status').eq('id',data.id).maybeSingle();if(!latest||['rejected','ended','missed'].includes(latest.status)){setPrivateCallStatus(latest?.status==='rejected'?'Appel refusé':'Appel terminé');await endPrivateCall(false)}else if(latest.status==='accepted')setPrivateCallStatus('Connecté');},1800);
+ }catch(e){await endPrivateCall(false);toast('Appel impossible : '+e.message)}
+}
+async function answerPrivateCall(id,decision){
+ const {data,error}=await db.from('private_video_calls').update(decision==='accepted'?{status:'accepted',answered_at:new Date().toISOString()}:{status:'rejected',ended_at:new Date().toISOString()}).eq('id',id).select().single();
+ if(error){toast('Réponse impossible : '+error.message);return}
+ if(decision==='accepted'){
+  privateCallRow=data;$('privateCallTitle').textContent='Appel vidéo entrant';$('privateCallOverlay').classList.remove('hidden');setPrivateCallStatus('Connexion à l’appel…');
+  try{await connectPrivateCall(data)}catch(e){toast('Connexion vidéo impossible : '+e.message);await endPrivateCall()}
+ }else toast('Appel refusé.');
+}
+function listenForPrivateCalls(){
+ if(!currentUser)return;
+ if(privateCallChannel)db.removeChannel(privateCallChannel);
+ privateCallChannel=db.channel('private-calls-'+currentUser.id).on('postgres_changes',{event:'INSERT',schema:'public',table:'private_video_calls',filter:'callee_id=eq.'+currentUser.id},payload=>{
+  const c=payload.new;if(c.status!=='ringing')return;
+  const accept=window.confirm('Appel vidéo entrant. Veux-tu répondre?');
+  answerPrivateCall(c.id,accept?'accepted':'rejected');
+ }).subscribe();
+}
+$('launcherVideoCall').addEventListener('click',startPrivateVideoCall);
+$('privateCallEnd').addEventListener('click',()=>endPrivateCall());
+$('privateCallClose').addEventListener('click',()=>endPrivateCall());
+$('privateCallMute').addEventListener('click',async()=>{if(!privateCallRoom)return;privateCallMuted=!privateCallMuted;await privateCallRoom.localParticipant.setMicrophoneEnabled(!privateCallMuted);$('privateCallMute').textContent=privateCallMuted?'🎙 Activer micro':'🎙 Couper micro'});
+$('privateCallCamera').addEventListener('click',async()=>{if(!privateCallRoom)return;privateCallCameraOn=!privateCallCameraOn;await privateCallRoom.localParticipant.setCameraEnabled(privateCallCameraOn);$('privateCallCamera').textContent=privateCallCameraOn?'📷 Caméra':'📷 Activer caméra'});
+
+async function liveKitModule(){if(!liveClientModule)liveClientModule=await import('https://esm.sh/livekit-client@2.15.6');return liveClientModule}
 async function requestLiveToken(roomName,role){const {data,error}=await db.functions.invoke('livekit-token',{body:{roomName,role}});if(error)throw new Error(data?.error||error.message);if(data?.error)throw new Error(data.error);return data}
 function updateLiveViewerCount(){const count=liveKitRoom?liveKitRoom.remoteParticipants.size:0;$('liveViewerCount').textContent=String(count);$('liveViewerStat').textContent=String(count)}
 async function connectLiveRoom(roomName,role,hostId){
