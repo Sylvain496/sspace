@@ -1,0 +1,85 @@
+name: SSPACE checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate HTML IDs and extract inline JavaScript
+        run: |
+          python - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+          from collections import Counter
+
+          class Checker(HTMLParser):
+              def __init__(self):
+                  super().__init__(convert_charrefs=False)
+                  self.ids = []
+                  self.inline_scripts = []
+                  self.in_inline_script = False
+                  self.current_script = []
+
+              def handle_starttag(self, tag, attrs):
+                  attrs = dict(attrs)
+                  if "id" in attrs:
+                      self.ids.append(attrs["id"])
+                  if tag == "script" and not attrs.get("src"):
+                      self.in_inline_script = True
+                      self.current_script = []
+
+              def handle_endtag(self, tag):
+                  if tag == "script" and self.in_inline_script:
+                      self.inline_scripts.append("".join(self.current_script))
+                      self.in_inline_script = False
+
+              def handle_data(self, data):
+                  if self.in_inline_script:
+                      self.current_script.append(data)
+
+          source = Path("index.html").read_text(encoding="utf-8")
+          checker = Checker()
+          checker.feed(source)
+          duplicates = sorted(k for k, v in Counter(checker.ids).items() if v > 1)
+          if duplicates:
+              raise SystemExit("Duplicate HTML IDs: " + ", ".join(duplicates))
+          scripts = [x for x in checker.inline_scripts if x.strip()]
+          if not scripts:
+              raise SystemExit("No inline application script found.")
+          Path("/tmp/sspace-inline.js").write_text("\\n".join(scripts), encoding="utf-8")
+          print(f"HTML OK: {len(checker.ids)} IDs uniques; {len(scripts)} script(s) inline(s).")
+          PY
+      - name: Check JavaScript syntax
+        run: node --check /tmp/sspace-inline.js
+      - name: Check core SSPACE features are present
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          html = Path("index.html").read_text(encoding="utf-8")
+          required = [
+              "data-reaction-picker",
+              "middle_finger:'🖕'",
+              "livekit-token",
+              "startLiveBroadcast",
+              "private_video_calls",
+              "live_cohost_requests",
+          ]
+          missing = [item for item in required if item not in html]
+          if missing:
+              raise SystemExit("Missing SSPACE feature markers: " + ", ".join(missing))
+          print("SSPACE core feature markers OK.")
+          PY
