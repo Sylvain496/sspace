@@ -525,6 +525,37 @@ label,.bio-label,.post-meta,.post-author,.online-title,.profile-editor-section{f
 .post-body,.bio-content{font-size:16px;font-weight:500;line-height:1.7}
 .post-title{font-weight:800}
 .card h2,.card h3,.hero h1{font-weight:800}
+
+/* Identité SSPACE plus visible dans la bande supérieure */
+.top{height:78px}
+.topin>.brand{
+  font-size:43px;letter-spacing:-3px;font-weight:900;
+  padding:4px 19px 7px;border-radius:16px;
+  background:linear-gradient(100deg,#ff9f1c 0%,#ffe04b 42%,#fff0a6 54%,#ff9f1c 100%);
+  background-size:220% 100%;-webkit-background-clip:text;background-clip:text;
+  color:transparent;
+  filter:drop-shadow(0 2px 0 #0008) drop-shadow(0 0 12px #ffb52f88);
+  text-shadow:none;
+  animation:sspaceBrandFlow 4s ease-in-out infinite,sspaceBrandGlow 2.3s ease-in-out infinite;
+}
+.topin>.brand .ss{letter-spacing:-6px}
+.topin>.brand:after{
+  content:"";position:absolute;left:17%;right:17%;bottom:0;height:3px;
+  border-radius:9px;background:linear-gradient(90deg,#ff941f,#ffe45b,#ff941f);
+  box-shadow:0 0 12px #ffc247aa;
+}
+body.app-light .topin>.brand{filter:drop-shadow(0 2px 0 #8a571d33) drop-shadow(0 0 10px #e7a72c66)}
+@media(max-width:650px){
+ .top{height:66px}
+ .topin>.brand{font-size:29px;letter-spacing:-2px;padding:3px 8px 6px}
+ .topin>.brand .ss{letter-spacing:-4px}
+ .topin>.brand:after{height:2px;left:19%;right:19%}
+}
+@media(max-width:390px){
+ .topin>.brand{font-size:25px}
+ .topin>.top-actions .top-message-btn{display:none}
+}
+
 </style>
 </head>
 <body>
