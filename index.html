@@ -153,6 +153,15 @@ body.app-light .main-menu-bottom{border-color:#d8dced}body.app-light .main-menu-
 
 .top-message-btn{padding:8px 12px;font-size:12px}.presence-meta{font-size:11px;color:#aeb8d8;margin-top:3px}.last-seen{font-size:11px;color:#a0a7c4;margin-top:3px}
 .message-launcher{position:fixed;right:20px;bottom:22px;z-index:40;width:330px;max-height:min(520px,72dvh);background:#10162b;border:1px solid #4a5484;border-radius:18px;box-shadow:0 20px 65px #000b;overflow:hidden;display:flex;flex-direction:column}
+/* Messagerie agrandie presque plein écran, dégagée du logo Netlify en bas */
+.message-launcher{position:fixed;inset:12px 12px 78px 12px;width:auto;max-width:none;max-height:none;height:auto;min-height:0;border-radius:18px;z-index:100}
+.message-launcher-head{flex:0 0 auto}
+.message-launcher-list{flex:1 1 auto;min-height:0;max-height:none}
+.message-launcher>.launcher-chat{flex:1 1 auto;min-height:0;overflow:hidden}
+.message-launcher .launcher-chat-messages{height:auto;max-height:none;min-height:0;flex:1 1 auto;overscroll-behavior:contain}
+.message-launcher .launcher-chat-compose{flex:0 0 auto;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+@media(max-width:720px){.message-launcher{inset:8px 8px 76px 8px;width:auto;height:auto;max-height:none;border-radius:16px}.message-launcher .launcher-chat-messages{min-height:0;max-height:none}}
+
 .message-launcher-head{padding:13px 15px;background:linear-gradient(110deg,#1b2c58,#342052);display:flex;align-items:center;justify-content:space-between;gap:8px}.message-launcher-list{overflow:auto;padding:8px;max-height:300px}
 .launcher-person{width:100%;border:0;background:transparent;color:#f4f5ff;display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;text-align:left}.launcher-person:hover{background:#252d4d}.launcher-person .avatar{width:38px;height:38px}
 .launcher-chat{display:flex;flex-direction:column;min-height:0}.launcher-chat-head{display:flex;align-items:center;gap:9px;padding:10px 12px;border-bottom:1px solid #303858}.launcher-chat-messages{height:240px;overflow:auto;padding:10px;background:#0a1021}
