@@ -1373,7 +1373,7 @@ $('toggleComposeSettings').onclick=()=>{const panel=$('composeSettingsPanel');co
 $('quickStartLive').onclick=()=>{showView('live');$('liveTitleInput').value='On jase en direct avec la gang!';$('liveTitleInput').focus()};
 let liveKitRoom=null,liveRoomId=null,liveRoomName=null,liveClientModule=null;
 
-let liveRealtimeChannel=null,liveActiveRole=null,liveCohostRequestId=null;
+let liveRealtimeChannel=null,liveRequestChannel=null,liveActiveRole=null,liveCohostRequestId=null;
 function liveEscape(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 async function refreshCohostRequests(){
  if(!liveRoomId||liveActiveRole!=='host')return;
@@ -1402,7 +1402,8 @@ async function requestToJoinLive(roomName){
  const {error:insertError}=await db.from('live_cohost_requests').upsert({room_id:room.id,requester_id:currentUser.id,status:'pending',updated_at:new Date().toISOString()},{onConflict:'room_id,requester_id'});
  if(insertError)throw insertError;
  liveCohostRequestId=room.id;toast('Demande envoyée! Attends l’acceptation de l’hôte.');
- const ch=db.channel('live-cohost-request-'+room.id+'-'+currentUser.id);
+ if(liveRequestChannel){try{await db.removeChannel(liveRequestChannel)}catch(_){}}
+ const ch=db.channel('live-cohost-request-'+room.id+'-'+currentUser.id);liveRequestChannel=ch;
  ch.on('postgres_changes',{event:'UPDATE',schema:'public',table:'live_cohost_requests',filter:'room_id=eq.'+room.id},payload=>{
   if(payload.new.requester_id!==currentUser.id)return;
   if(payload.new.status==='accepted'){toast('Demande acceptée! Tu peux monter à l’écran.');const b=document.querySelector('[data-join-live="'+roomName+'"]');if(b)b.textContent='Monter sur scène';}
@@ -1514,7 +1515,7 @@ async function connectLiveRoom(roomName,role,hostId){
  liveKitRoom=new kit.Room({adaptiveStream:true,dynacast:true});
  liveKitRoom.on(kit.RoomEvent.ParticipantConnected,updateLiveViewerCount);
  liveKitRoom.on(kit.RoomEvent.ParticipantDisconnected,updateLiveViewerCount);
- liveKitRoom.on(kit.RoomEvent.TrackSubscribed,(track,publication,participant)=>{if(track.kind==='video'){const el=track.attach();el.autoplay=true;el.playsInline=true;el.className='live-remote-video';$('liveStage').appendChild(el)}});
+ liveKitRoom.on(kit.RoomEvent.TrackSubscribed,(track,publication,participant)=>{const el=track.attach();el.autoplay=true;el.playsInline=true;if(track.kind==='video'){el.className='live-remote-video';$('liveStage').appendChild(el)}else if(track.kind==='audio'){el.dataset.liveAudioParticipant=participant.identity;el.style.display='none';document.body.appendChild(el);el.play?.().catch(()=>{})}});
  liveKitRoom.on(kit.RoomEvent.TrackUnsubscribed,track=>track.detach().forEach(el=>el.remove()));
  liveKitRoom.on(kit.RoomEvent.Disconnected,()=>{document.querySelectorAll('.live-remote-video').forEach(x=>x.remove());updateLiveViewerCount()});
  await liveKitRoom.connect(auth.serverUrl,auth.token);
@@ -1535,13 +1536,20 @@ async function startLiveBroadcast(){
   const title=$('liveTitleInput').value.trim().slice(0,90)||'Direct SSPACE';
   const {data,error}=await db.from('live_rooms').insert({host_user_id:currentUser.id,room_name:roomName,title,status:'live'}).select().single();
   if(error)throw error;liveRoomId=data.id;liveRoomName=roomName;
-  await connectLiveRoom(roomName,'host',currentUser.id);toast('Tu es en direct sur SSPACE!');await loadLiveRooms();
- }catch(e){btn.disabled=false;if(liveRoomId){await db.from('live_rooms').update({status:'ended',ended_at:new Date().toISOString()}).eq('id',liveRoomId);liveRoomId=null}toast('Direct non démarré : '+(e.message||'vérifie la configuration LiveKit.'))}
+  if(liveRealtimeChannel){try{await db.removeChannel(liveRealtimeChannel)}catch(_){}}
+  liveRealtimeChannel=db.channel('live-host-events-'+liveRoomId)
+   .on('postgres_changes',{event:'*',schema:'public',table:'live_cohost_requests',filter:'room_id=eq.'+liveRoomId},()=>refreshCohostRequests())
+   .on('postgres_changes',{event:'*',schema:'public',table:'live_cohost_invites',filter:'room_id=eq.'+liveRoomId},()=>refreshCohostRequests())
+   .subscribe();
+  await connectLiveRoom(roomName,'host',currentUser.id);await refreshCohostRequests();toast('Tu es en direct sur SSPACE!');await loadLiveRooms();
+ }catch(e){btn.disabled=false;if(liveRoomId){await db.from('live_rooms').update({status:'ended',ended_at:new Date().toISOString()}).eq('id',liveRoomId);liveRoomId=null}if(liveRealtimeChannel){try{await db.removeChannel(liveRealtimeChannel)}catch(_){}liveRealtimeChannel=null}toast('Direct non démarré : '+(e.message||'vérifie la configuration LiveKit.'))}
 }
 async function stopLiveBroadcast(){
  if(liveKitRoom){await liveKitRoom.disconnect();liveKitRoom=null}
+ if(liveRealtimeChannel){try{await db.removeChannel(liveRealtimeChannel)}catch(_){}liveRealtimeChannel=null}
+ if(liveRequestChannel){try{await db.removeChannel(liveRequestChannel)}catch(_){}liveRequestChannel=null}
  if(liveRoomId){await db.from('live_rooms').update({status:'ended',ended_at:new Date().toISOString()}).eq('id',liveRoomId).eq('host_user_id',currentUser.id)}
- liveRoomId=null;liveRoomName=null;$('liveStage').classList.remove('camera-on');$('liveStatePill').textContent='● STUDIO PRÊT';$('liveStartBroadcast').disabled=false;$('liveStopBroadcast').disabled=true;updateLiveViewerCount();await loadLiveRooms();
+ liveRoomId=null;liveRoomName=null;liveActiveRole=null;$('liveStage').classList.remove('camera-on');$('liveStatePill').textContent='● STUDIO PRÊT';$('liveStartBroadcast').disabled=false;$('liveStopBroadcast').disabled=true;updateLiveViewerCount();await loadLiveRooms();
 }
 async function loadLiveRooms(){
  const host=$('liveRoomsList');if(!host)return;
