@@ -683,8 +683,8 @@ body.app-light .topin>.brand{filter:drop-shadow(0 2px 0 #8a571d33) drop-shadow(0
  </div>
  <aside class="live-side">
   <div class="card"><h3 style="margin:0 0 12px">📊 Ton direct</h3><div class="live-stat-grid"><div class="live-stat"><strong id="liveViewerStat">0</strong><small>SPECTATEURS EN DIRECT</small></div><div class="live-stat"><strong id="liveReactionStat">0</strong><small>RÉACTIONS REÇUES</small></div></div><p class="tiny muted" style="margin:10px 0 0">Le nombre de participants connectés sera synchronisé par LiveKit.</p></div>
-  <div class="card"><h3 style="margin:0 0 10px">🔥 Fais monter le compteur</h3><div class="live-reactions"><button type="button" data-live-reaction="❤️" aria-label="Coeur">❤️</button><button type="button" data-live-reaction="🔥" aria-label="Feu">🔥</button><button type="button" data-live-reaction="😂" aria-label="Rire">😂</button><button type="button" data-live-reaction="👏" aria-label="Applaudissements">👏</button><button type="button" data-live-reaction="🚀" aria-label="Fusée">🚀</button></div><p class="tiny muted">Essaie les réactions : elles font avancer l'objectif de démonstration.</p></div>
-  <div class="card"><h3 style="margin:0">💬 Clavardage du studio</h3><div class="live-chat-log" id="liveChatLog"><div class="live-chat-line muted">Le clavardage apparaîtra ici pendant un vrai direct.</div></div><div class="tiny muted">Les messages entre spectateurs seront activés avec le service de diffusion.</div></div>
+  <div class="card"><h3>🎤 Live à deux</h3><p class="tiny muted">Trouve un membre, invite-le à monter avec toi ou accepte les demandes des spectateurs.</p><input id="liveInviteSearch" class="field" placeholder="Nom d’utilisateur ou nom affiché"><div id="liveInviteResults" class="tiny muted">Démarre ton direct pour inviter quelqu’un.</div><hr style="border-color:#282e49;margin:12px 0"><b>Demandes pour rejoindre la scène</b><div id="liveCohostRequests" class="tiny muted">Les demandes apparaîtront ici pendant ton direct.</div></div><div class="card"><h3 style="margin:0 0 10px">🔥 Fais monter le compteur</h3><div class="live-reactions"><button type="button" data-live-reaction="❤️" aria-label="Coeur">❤️</button><button type="button" data-live-reaction="🔥" aria-label="Feu">🔥</button><button type="button" data-live-reaction="😂" aria-label="Rire">😂</button><button type="button" data-live-reaction="👏" aria-label="Applaudissements">👏</button><button type="button" data-live-reaction="🚀" aria-label="Fusée">🚀</button></div><p class="tiny muted">Essaie les réactions : elles font avancer l'objectif de démonstration.</p></div>
+  <div class="card"><h3 style="margin:0">💬 Clavardage du studio</h3><div class="live-chat-log" id="liveChatLog"><div class="live-chat-line muted">Le clavardage apparaîtra ici pendant un vrai direct.</div></div><div class="tiny muted">Clavardage de diffusion à connecter ensuite.</div></div>
  </aside>
 </div></section>
 <section id="discoverView" class="hidden"><div class="hero"><h1>Découvrir</h1><p>Des gens et des histoires à suivre.</p></div><div class="people-search"><input id="peopleSearchInput" class="field" maxlength="21" placeholder="Rechercher un @nom exact…"><button id="peopleSearchBtn" class="btn primary">Rechercher</button></div><p class="tiny muted">Recherche par nom d’utilisateur exact, avec ou sans @. Les résultats partiels ne sont pas affichés.</p><div id="peopleList"><div class="card empty">Entre le nom exact d’un membre pour le trouver.</div></div><section class="card friend-requests-panel"><div class="friend-requests-heading"><h2>Demandes d’amis</h2><span class="tiny muted">Juste en dessous de la recherche</span></div><div id="friendRequestsList"><div class="empty tiny">Chargement des demandes…</div></div></section></section><section id="messagesView" class="hidden"><div class="hero"><h1>Conversations privées</h1><p>Échange en privé et choisis l’ambiance de chaque discussion.</p></div><div class="chat-layout"><div class="card chat-list"><h3>Mes conversations</h3><div id="conversationList" class="tiny muted">Chargement...</div><hr style="border-color:#282e49;margin:14px 0"><h3>Commencer une discussion</h3><div id="chatPeopleList"></div></div><div class="card chat-thread"><div id="chatEmpty" class="empty">Choisis un membre pour commencer à discuter ✨</div><div id="chatActive" class="hidden"><div class="post-head chat-person-head"><div id="chatAvatar" class="avatar">S</div><div class="chat-person-title"><b id="chatName">Conversation</b><div id="chatTypingStatus" class="tiny muted">Discussion privée</div></div><div class="chat-more-wrap"><button type="button" class="btn chat-more-trigger" data-chat-more="chatMoreMenu" aria-label="Plus d’options">···</button><div id="chatMoreMenu" class="chat-more-menu hidden"><button type="button" data-chat-personalize="chatTypographyPanel">✎ Personnaliser l’écriture</button></div><div id="chatTypographyPanel" class="chat-typography-panel hidden"><b>Personnaliser l’écriture</b><div class="typography-label">Style de saisie · 6 choix gratuits</div><div class="typography-styles"><button type="button" class="typography-style" data-chat-style="classic">Classique</button><button type="button" class="typography-style" data-chat-style="serif">Sérif</button><button type="button" class="typography-style" data-chat-style="rounded">Arrondi</button><button type="button" class="typography-style" data-chat-style="typewriter">Machine</button><button type="button" class="typography-style" data-chat-style="elegant">Élégant</button><button type="button" class="typography-style" data-chat-style="pixel">Pixel</button></div><div class="typography-label">Couleur du texte</div><div class="typography-colors"><button type="button" class="typography-color" data-chat-color="#f4f6ff" style="--swatch:#f4f6ff" aria-label="Blanc" title="Blanc"></button><button type="button" class="typography-color" data-chat-color="#70d7ff" style="--swatch:#70d7ff" aria-label="Bleu" title="Bleu"></button><button type="button" class="typography-color" data-chat-color="#b99aff" style="--swatch:#b99aff" aria-label="Violet" title="Violet"></button><button type="button" class="typography-color" data-chat-color="#ff8fcf" style="--swatch:#ff8fcf" aria-label="Rose" title="Rose"></button><button type="button" class="typography-color" data-chat-color="#8fe3b0" style="--swatch:#8fe3b0" aria-label="Menthe" title="Menthe"></button><button type="button" class="typography-color" data-chat-color="#ffd36e" style="--swatch:#ffd36e" aria-label="Doré" title="Doré"></button><button type="button" class="typography-color" data-chat-color="#ff8a8a" style="--swatch:#ff8a8a" aria-label="Corail" title="Corail"></button></div><p class="tiny muted">Tes choix sont enregistrés pour cette conversation.</p></div></div></div><h3 style="margin:18px 0 6px">Décor de conversation</h3><div id="decorGrid" class="decor-grid"></div><div id="chatSurface" class="chat-surface decor-aurora-night"><div id="chatMessages" class="chat-messages"></div></div><div class="chat-tools"><label class="btn" for="chatMediaFile">Joindre photo ou vidéo</label><input id="chatMediaFile" type="file" accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime" hidden><span class="tiny muted" id="chatMediaStatus">Médias privés · 12 Mo maximum</span></div><form id="chatSendForm" class="chat-compose"><textarea id="chatInput" class="field" maxlength="5000" rows="2" placeholder="Écris ton message..."></textarea><button class="btn primary" type="submit">Envoyer</button></form></div></div></div></section>
@@ -1252,6 +1252,59 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-modo-dismi
 $('toggleComposeSettings').onclick=()=>{const panel=$('composeSettingsPanel');const open=panel.classList.toggle('hidden')===false;$('toggleComposeSettings').setAttribute('aria-expanded',String(open));$('toggleComposeSettings').textContent=open?'⚙️ Masquer les options':'⚙️ Options : photo, vidéo, sondage et amis'};
 $('quickStartLive').onclick=()=>{showView('live');$('liveTitleInput').value='On jase en direct avec la gang!';$('liveTitleInput').focus()};
 let liveKitRoom=null,liveRoomId=null,liveRoomName=null,liveClientModule=null;
+
+let liveRealtimeChannel=null,liveActiveRole=null,liveCohostRequestId=null;
+function liveEscape(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+async function refreshCohostRequests(){
+ if(!liveRoomId||liveActiveRole!=='host')return;
+ const box=$('liveCohostRequests');if(!box)return;
+ const {data,error}=await db.from('live_cohost_requests').select('id,requester_id,created_at').eq('room_id',liveRoomId).eq('status','pending').order('created_at');
+ if(error){box.textContent='Erreur : '+error.message;return}
+ if(!data?.length){box.textContent='Aucune demande pour le moment.';return}
+ const ids=data.map(x=>x.requester_id);
+ const {data:profiles}=await db.from('profiles').select('id,username,display_name,avatar_url').in('id',ids);
+ const byId=new Map((profiles||[]).map(p=>[p.id,p]));
+ box.innerHTML=data.map(x=>{const p=byId.get(x.requester_id)||{};return '<div class="live-room-card"><b>'+liveEscape(p.display_name||p.username||'Membre')+'</b><div class="tiny muted">@'+liveEscape(p.username||'membre')+'</div><button class="btn primary" data-live-accept="'+x.id+'" data-live-user="'+x.requester_id+'">Accepter</button> <button class="btn" data-live-reject="'+x.id+'">Refuser</button></div>'}).join('');
+}
+async function searchLiveInvitees(){
+ const box=$('liveInviteResults'),q=$('liveInviteSearch').value.trim().replace(/^@/,'');
+ if(!liveRoomId||liveActiveRole!=='host'){box.textContent='Démarre ton direct avant d’inviter un coanimateur.';return}
+ if(q.length<2){box.textContent='Entre au moins 2 caractères.';return}
+ const {data,error}=await db.from('profiles').select('id,username,display_name').ilike('username','%'+q+'%').neq('id',currentUser.id).limit(8);
+ if(error){box.textContent='Recherche impossible : '+error.message;return}
+ if(!data?.length){box.textContent='Aucun membre trouvé.';return}
+ box.innerHTML=data.map(p=>'<div class="live-room-card"><b>'+liveEscape(p.display_name||p.username)+'</b><div class="tiny muted">@'+liveEscape(p.username)+'</div><button class="btn primary" data-live-invite="'+p.id+'">Inviter à l’écran</button></div>').join('');
+}
+async function requestToJoinLive(roomName){
+ const {data:room,error}=await db.from('live_rooms').select('id,host_user_id').eq('room_name',roomName).eq('status','live').maybeSingle();
+ if(error||!room)throw new Error('Ce direct est terminé.');
+ if(room.host_user_id===currentUser.id)throw new Error('Tu es déjà l’hôte.');
+ const {error:insertError}=await db.from('live_cohost_requests').upsert({room_id:room.id,requester_id:currentUser.id,status:'pending',updated_at:new Date().toISOString()},{onConflict:'room_id,requester_id'});
+ if(insertError)throw insertError;
+ liveCohostRequestId=room.id;toast('Demande envoyée! Attends l’acceptation de l’hôte.');
+ const ch=db.channel('live-cohost-request-'+room.id+'-'+currentUser.id);
+ ch.on('postgres_changes',{event:'UPDATE',schema:'public',table:'live_cohost_requests',filter:'room_id=eq.'+room.id},payload=>{
+  if(payload.new.requester_id!==currentUser.id)return;
+  if(payload.new.status==='accepted'){toast('Demande acceptée! Tu peux monter à l’écran.');const b=document.querySelector('[data-join-live="'+roomName+'"]');if(b)b.textContent='Monter sur scène';}
+  if(payload.new.status==='rejected')toast('L’hôte a refusé la demande cette fois.');
+ }).subscribe();
+}
+async function acceptLiveCohost(id,userId){
+ const {error}=await db.from('live_cohost_requests').update({status:'accepted',updated_at:new Date().toISOString()}).eq('id',id);
+ if(error){toast('Acceptation impossible : '+error.message);return}
+ await db.from('live_rooms').update({cohost_user_id:userId}).eq('id',liveRoomId).eq('host_user_id',currentUser.id);
+ toast('Membre accepté! Il peut rejoindre la scène.');await refreshCohostRequests();
+}
+async function rejectLiveCohost(id){
+ const {error}=await db.from('live_cohost_requests').update({status:'rejected',updated_at:new Date().toISOString()}).eq('id',id);
+ if(error)toast('Refus impossible : '+error.message);else{toast('Demande refusée.');await refreshCohostRequests()}
+}
+$('liveInviteSearch').addEventListener('input',()=>{clearTimeout(window.__liveInviteTimer);window.__liveInviteTimer=setTimeout(searchLiveInvitees,250)});
+document.addEventListener('click',async e=>{
+ const inv=e.target.closest('[data-live-invite]');if(inv){inv.disabled=true;const {error}=await db.from('live_cohost_requests').upsert({room_id:liveRoomId,requester_id:inv.dataset.liveInvite,status:'pending',updated_at:new Date().toISOString()},{onConflict:'room_id,requester_id'});if(error)toast('Invitation impossible : '+error.message);else toast('Invitation envoyée! Le membre doit demander/attendre son accès.');return}
+ const acc=e.target.closest('[data-live-accept]');if(acc){acc.disabled=true;await acceptLiveCohost(acc.dataset.liveAccept,acc.dataset.liveUser);return}
+ const rej=e.target.closest('[data-live-reject]');if(rej){rej.disabled=true;await rejectLiveCohost(rej.dataset.liveReject);return}
+});
 async function liveKitModule(){if(!liveClientModule)liveClientModule=await import('https://esm.sh/livekit-client@2.15.6');return liveClientModule}
 async function requestLiveToken(roomName,role){const {data,error}=await db.functions.invoke('livekit-token',{body:{roomName,role}});if(error)throw new Error(data?.error||error.message);if(data?.error)throw new Error(data.error);return data}
 function updateLiveViewerCount(){const count=liveKitRoom?liveKitRoom.remoteParticipants.size+1:0;$('liveViewerCount').textContent=String(count);$('liveViewerStat').textContent=String(count)}
@@ -1264,7 +1317,7 @@ async function connectLiveRoom(roomName,role,hostId){
  liveKitRoom.on(kit.RoomEvent.TrackUnsubscribed,track=>track.detach().forEach(el=>el.remove()));
  liveKitRoom.on(kit.RoomEvent.Disconnected,()=>{document.querySelectorAll('.live-remote-video').forEach(x=>x.remove());updateLiveViewerCount()});
  await liveKitRoom.connect(auth.serverUrl,auth.token);
- if(role==='host')await liveKitRoom.localParticipant.setCameraEnabled(true);
+ if(role==='host'||role==='cohost'){await liveKitRoom.localParticipant.setCameraEnabled(true);await liveKitRoom.localParticipant.setMicrophoneEnabled(true);liveActiveRole=role;}
  updateLiveViewerCount();$('liveStatePill').textContent=role==='host'?'● EN DIRECT':'● EN TRAIN DE REGARDER';
  $('liveStage').classList.add('camera-on');
  if(role==='host'){
@@ -1295,11 +1348,11 @@ async function loadLiveRooms(){
  if(error){host.textContent='Impossible de charger les directs : '+error.message;return}
  if(!data?.length){host.textContent='Aucun direct en cours. Lance le premier!';return}
  const ids=[...new Set(data.map(x=>x.host_user_id))];const {data:people}=await db.from('profiles').select('id,username,display_name,avatar_url').in('id',ids);const map=new Map((people||[]).map(p=>[p.id,p]));
- host.innerHTML=data.map(x=>{const p=map.get(x.host_user_id)||{};return '<div class="live-room-card"><b>🔴 '+esc(x.title)+'</b><div class="tiny muted">'+esc(p.display_name||p.username||'Membre SSPACE')+'</div><button type="button" class="btn primary" data-join-live="'+esc(x.room_name)+'">Regarder</button></div>'}).join('');
+ host.innerHTML=data.map(x=>{const p=map.get(x.host_user_id)||{};return '<div class="live-room-card"><b>🔴 '+esc(x.title)+'</b><div class="tiny muted">'+esc(p.display_name||p.username||'Membre SSPACE')+'</div><button type="button" class="btn primary" data-join-live="'+esc(x.room_name)+'">Regarder</button> <button type="button" class="btn" data-request-cohost="'+esc(x.room_name)+'">Demander à monter</button></div>'}).join('');
 }
 $('liveStartBroadcast').addEventListener('click',startLiveBroadcast);
 $('liveStopBroadcast').addEventListener('click',stopLiveBroadcast);
-document.addEventListener('click',async e=>{const b=e.target.closest('[data-join-live]');if(!b)return;if(liveKitRoom)return toast('Quitte ton direct actuel avant d’en regarder un autre.');b.disabled=true;try{liveRoomName=b.dataset.joinLive;await connectLiveRoom(liveRoomName,'viewer');toast('Connecté au direct!')}catch(err){toast('Impossible de rejoindre : '+err.message);b.disabled=false}});
+document.addEventListener('click',async e=>{const req=e.target.closest('[data-request-cohost]');if(req){req.disabled=true;try{await requestToJoinLive(req.dataset.requestCohost)}catch(err){toast(err.message)}finally{req.disabled=false}return}const b=e.target.closest('[data-join-live]');if(!b)return;if(liveKitRoom)return toast('Quitte ton direct actuel avant d’en regarder un autre.');b.disabled=true;try{liveRoomName=b.dataset.joinLive;const {data:room}=await db.from('live_rooms').select('id').eq('room_name',liveRoomName).maybeSingle();let role='viewer';if(room){const {data:approval}=await db.from('live_cohost_requests').select('id').eq('room_id',room.id).eq('requester_id',currentUser.id).eq('status','accepted').maybeSingle();if(approval)role='cohost'}await connectLiveRoom(liveRoomName,role);toast(role==='cohost'?'Tu es en direct avec l’hôte!':'Connecté au direct!')}catch(err){toast('Impossible de rejoindre : '+err.message);b.disabled=false}});
 
 let liveCameraStream=null,liveReactionTotal=0;
 async function enableLiveCamera(){
