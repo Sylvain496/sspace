@@ -60,7 +60,7 @@ jobs:
           scripts = [x for x in checker.inline_scripts if x.strip()]
           if not scripts:
               raise SystemExit("No inline application script found.")
-          Path("/tmp/sspace-inline.js").write_text("\\n".join(scripts), encoding="utf-8")
+          Path("/tmp/sspace-inline.js").write_text("\n".join(scripts), encoding="utf-8")
           print(f"HTML OK: {len(checker.ids)} IDs uniques; {len(scripts)} script(s) inline(s).")
           PY
       - name: Check JavaScript syntax
