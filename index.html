@@ -676,6 +676,43 @@ body.app-light .topin>.brand{filter:drop-shadow(0 2px 0 #8a571d33) drop-shadow(0
 }
 
 </style>
+
+<style id="sspace-notification-badge-visibility">
+/* Chiffres de notifications : contraste et taille renforcés */
+.request-count{
+  display:inline-flex!important;
+  align-items:center;
+  justify-content:center;
+  min-width:32px;
+  height:30px;
+  padding:0 9px!important;
+  box-sizing:border-box;
+  border:2px solid #fff!important;
+  border-radius:999px!important;
+  background:linear-gradient(135deg,#ff3b45 0%,#ff7a18 100%)!important;
+  color:#fff!important;
+  font-size:16px!important;
+  line-height:1!important;
+  font-weight:950!important;
+  letter-spacing:.2px;
+  text-shadow:0 1px 2px #761313;
+  box-shadow:0 0 0 2px #ff654a55,0 3px 13px #ff3b4580!important;
+  flex:0 0 auto;
+}
+.main-menu .request-count{
+  background:linear-gradient(135deg,#ff303f 0%,#ff851b 100%)!important;
+}
+.sspace-side-nav .request-count{
+  min-width:34px;
+  height:32px;
+  font-size:17px!important;
+}
+#menuFriendRequests .request-count{margin-left:auto}
+@media(max-width:650px){
+  .request-count{min-width:30px;height:28px;font-size:15px!important}
+}
+</style>
+
 </head>
 <body>
 <header class="top"><div class="shell topin"><button id="menuToggle" class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false">☰</button><a class="brand" href="#" aria-label="SSPACE"><svg class="sspace-notebook-logo" viewBox="0 0 52 52" aria-hidden="true"><defs><linearGradient id="nbPage" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#48e6ff"/><stop offset="1" stop-color="#8872ff"/></linearGradient><linearGradient id="nbPen" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe45b"/><stop offset="1" stop-color="#ff8b43"/></linearGradient></defs><path class="nb-book" d="M9 10.5Q18 6 26 11v31Q17 37 9 41Z" fill="url(#nbPage)" stroke="#d7faff" stroke-width="1.8" stroke-linejoin="round"/><path class="nb-book" d="M26 11q8-5 17-.5V41q-9-4-17 1Z" fill="#8174ff" stroke="#e4ddff" stroke-width="1.8" stroke-linejoin="round"/><path d="M14 17q5-2 9 0M14 23q5-2 9 0M31 17q5-2 9 0M31 23q5-2 9 0" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" opacity=".9"/><g class="nb-pencil"><path d="m34 7 5-4 10 10-4 5Z" fill="url(#nbPen)" stroke="#fff0b5" stroke-width="1"/><path d="m34 7-5 5 10 10 5-5Z" fill="#ff9c50" stroke="#ffe3ad" stroke-width="1"/><path d="m29 12-3 9 9-3Z" fill="#ffe6c2"/><path d="m26 21 3-3 3 3-4 2Z" fill="#4d477c"/></g><path class="nb-spark" d="M7 5v5M4.5 7.5h5M46 29v5M43.5 31.5h5" stroke="#ffe45b" stroke-width="2" stroke-linecap="round"/></svg><span class="brand-word"><span class="ss">SS</span>PACE</span></a><div class="top-actions"><span id="headerUser" class="muted tiny"></span><button type="button" id="openHashtagSearch" class="hashtag-search-trigger" aria-label="Rechercher une publication par mot-clic">⌕ <span># Recherche</span></button><button id="openMessageLauncher" class="btn top-message-btn" type="button" aria-label="Ouvrir les messages">✉ Messages</button><button id="headerAuth" class="btn primary">Connexion</button></div></div></header>
