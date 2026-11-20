@@ -702,6 +702,7 @@ body.app-light .topin>.brand{filter:drop-shadow(0 2px 0 #8a571d33) drop-shadow(0
 .sspace-glow-toggle.active{border-color:#b79aff;box-shadow:0 0 15px #a56cff66;color:#fff}
 @media(prefers-reduced-motion:reduce){.compose-emoji,.sspace-glow-text{animation:none!important}}
 .sspace-published-glow{color:#f1eaff!important;text-shadow:0 0 5px #65a6ff,0 0 12px #a45cff,0 0 20px #7d63ff;animation:sspaceTextGlow 2.6s ease-in-out infinite;}.sspace-published-glow button.hashtag-link{color:inherit;text-shadow:inherit}@media(prefers-reduced-motion:reduce){.sspace-published-glow{animation:none}}
+.ai-account-badge{display:inline-flex;align-items:center;margin-left:5px;padding:2px 7px;border:1px solid #8b7cff88;border-radius:999px;background:#5543b733;color:#c9c0ff;font-size:9px;font-weight:800;letter-spacing:.4px;vertical-align:middle;white-space:nowrap}
 </style>
 
 <style id="sspace-notification-badge-visibility">
@@ -1102,7 +1103,7 @@ function renderPosts(items,target){
  });
  flushText();flushImages();target.innerHTML=html;
 }
-.ai-account-badge{display:inline-flex;align-items:center;margin-left:5px;padding:2px 7px;border:1px solid #8b7cff88;border-radius:999px;background:#5543b733;color:#c9c0ff;font-size:9px;font-weight:800;letter-spacing:.4px;vertical-align:middle;white-space:nowrap}
+
 function renderCommentItem(c,postId,isReply=false){
  const profile=c.profiles||{},name=profile.display_name||profile.username||'Membre';
  const liked=(c.comment_likes||[]).some(x=>x.user_id===currentUser.id),count=(c.comment_likes||[]).length;
