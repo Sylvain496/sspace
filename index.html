@@ -1171,7 +1171,7 @@ async function publish(title,content,imageFile,mediaFile=null,poll=null,mentione
  const quick=$('publishQuick'),blog=$('publishBlog');quick.disabled=true;blog.disabled=true;
  try{
   const image_url=await uploadPostImage(imageFile),media=await uploadPostMedia(mediaFile);
-  const {data:postId,error}=await db.rpc('create_post_bundle',{p_title:title.trim(),p_content:(quickPostGlow&&$('quickPost').value===content?'SSPACE_GLOW_MARKER\\n':'')+(content.trim()||' '),p_image_url:image_url,p_media_url:media?.url||null,p_media_type:media?.type||null,p_poll_question:poll?.question||null,p_poll_options:poll?.options||null,p_mentioned_user_ids:mentionedIds});
+  const {data:postId,error}=await db.rpc('create_post_bundle',{p_title:title.trim(),p_content:(quickPostGlow&&$('quickPost').value===content?'SSPACE_GLOW_MARKER\n':'')+(content.trim()||' '),p_image_url:image_url,p_media_url:media?.url||null,p_media_type:media?.type||null,p_poll_question:poll?.question||null,p_poll_options:poll?.options||null,p_mentioned_user_ids:mentionedIds});
   if(error)throw error;
   toast('Publication ajoutée! ✨');$('quickPost').value='';$('blogTitle').value='';$('blogContent').value='';
   ['quickImage','blogImage','quickMedia'].forEach(id=>$(id).value='');
