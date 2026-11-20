@@ -1,4 +1,4 @@
-const CACHE='sspace-static-v2';
+const CACHE='sspace-static-v3';
 const CORE_ASSETS=['./','./index.html','./manifest.webmanifest'];
 
 self.addEventListener('install',event=>{
