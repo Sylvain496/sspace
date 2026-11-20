@@ -1508,7 +1508,8 @@ async function respondLiveInvite(id,roomId,decision){
  toast(decision==='accepted'?'Invitation acceptée! Ouvre le direct pour rejoindre la scène.':'Invitation refusée.');
  await loadIncomingLiveInvites();await loadLiveRooms();
 }
-if(currentUser){db.channel('live-invites-user-'+currentUser.id).on('postgres_changes',{event:'*',schema:'public',table:'live_cohost_invites',filter:'invited_user_id=eq.'+currentUser.id},()=>loadIncomingLiveInvites()).subscribe()}\n
+if(currentUser){db.channel('live-invites-user-'+currentUser.id).on('postgres_changes',{event:'*',schema:'public',table:'live_cohost_invites',filter:'invited_user_id=eq.'+currentUser.id},()=>loadIncomingLiveInvites()).subscribe()}
+
 /* SSPACE private video calls */
 let privateCallRoom=null,privateCallRow=null,privateCallPoll=null,privateCallMuted=false,privateCallCameraOn=true,privateCallChannel=null;
 function setPrivateCallStatus(t){const n=$('privateCallStatus');if(n)n.textContent=t}
