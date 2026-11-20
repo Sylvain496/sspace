@@ -651,7 +651,19 @@ async function stopOnlinePresence(){if(privateNotificationChannel){const notific
  $('onlineCount').textContent='Hors ligne';
 }
 
-async function loadFeed(append=false){const next=append?feedLimit+24:24;const {data,error}=await db.from('posts').select('id,user_id,title,content,image_url,media_url,media_type,poll_question,created_at,profiles(username,display_name,avatar_url,profile_effect),comments(id,user_id,content,created_at,profiles(username,display_name)),likes(user_id),poll_options(id,post_id,option_text,post_poll_votes(user_id)),post_mentions(mentioned_user_id,profiles:profiles!post_mentions_mentioned_user_id_fkey(username,display_name))').order('created_at',{ascending:false}).limit(next);if(error){$('feedList').innerHTML='<div class="card empty">Impossible de charger le fil : '+esc(error.message)+'</div>';return}feedLimit=next;postsCache=data||[];renderFeedSorted();$('loadMorePosts').classList.toggle('hidden',postsCache.length<feedLimit);if(!append){loadSuggestedMembers();loadTrends();loadFriendTagChoices();}}
+let feedLoadInProgress=false;
+async function loadFeed(append=false){
+ if(feedLoadInProgress)return;
+ feedLoadInProgress=true;
+ const next=append?feedLimit+24:24;
+ try{
+  const {data,error}=await db.from('posts').select('id,user_id,title,content,image_url,media_url,media_type,poll_question,created_at,profiles(username,display_name,avatar_url,profile_effect,is_ai_profile),comments(id,user_id,content,created_at,parent_comment_id,profiles(username,display_name,avatar_url,is_ai_profile),comment_likes(user_id)),likes(user_id,reaction_type),poll_options(id,post_id,option_text,post_poll_votes(user_id)),post_mentions(mentioned_user_id,profiles:profiles!post_mentions_mentioned_user_id_fkey(username,display_name,avatar_url))').order('created_at',{ascending:false}).limit(next);
+  if(error){$('feedList').innerHTML='<div class="card empty">Impossible de charger le fil : '+esc(error.message)+'</div>';return;}
+  feedLimit=next;postsCache=data||[];renderFeedSorted();$('loadMorePosts').classList.toggle('hidden',postsCache.length<feedLimit);
+  if(!append){loadSuggestedMembers();loadTrends();loadFriendTagChoices();}
+ }catch(e){console.error('SSPACE feed error',e);$('feedList').innerHTML='<div class="card empty">Une erreur inattendue empêche de charger le fil. Réessaie.</div>';}
+ finally{feedLoadInProgress=false;}
+}
 
 function renderFeedSorted(){
  const rows=[...postsCache];
