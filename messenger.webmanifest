@@ -1,0 +1,10 @@
+{
+  "name": "SSPACE Messenger",
+  "short_name": "Messenger",
+  "start_url": "./messenger.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#090b18",
+  "theme_color": "#090b18",
+  "description": "Application de messages SSPACE"
+}
