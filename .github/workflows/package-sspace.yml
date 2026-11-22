@@ -1,0 +1,20 @@
+name: SSPACE package ZIP
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Package project
+        run: |
+          zip -r SSPACE-COMPLET.zip . -x ".git/*" ".github/workflows/*" "SSPACE-COMPLET.zip"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SSPACE-COMPLET
+          path: SSPACE-COMPLET.zip
+          retention-days: 7
