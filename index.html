@@ -1679,7 +1679,7 @@ function syncKeyboardState(){const vv=window.visualViewport;const height=vv?vv.h
 // SSPACE Messenger companion entry: route into the dedicated messages view.
 (function(){
   const messengerEntry=new URLSearchParams(location.search).get('openMessenger')==='1';
-  document.addEventListener('click',function(e){const nav=e.target.closest('[data-view="messages"]');if(nav){e.preventDefault();e.stopImmediatePropagation();location.href='./messenger.html';}},true);
+  document.addEventListener('click',function(e){const nav=e.target.closest('[data-view="messages"]');if(nav&&window.top===window.self){e.preventDefault();e.stopImmediatePropagation();location.href='./messenger.html';}},true);
   if(messengerEntry){const tryOpen=()=>{if(typeof showView==='function'&&currentUser){showView('messages');return true}return false};let tries=0;const timer=setInterval(()=>{tries++;if(tryOpen()||tries>60)clearInterval(timer)},250);}
 })();
 </script>
