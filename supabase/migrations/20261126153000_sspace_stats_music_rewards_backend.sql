@@ -34,6 +34,13 @@ drop policy if exists sspace_badge_catalog_read_active on public.sspace_badge_ca
 create policy sspace_badge_catalog_read_active on public.sspace_badge_catalog for select to authenticated using(active=true);
 drop policy if exists sspace_user_badges_read_own on public.sspace_user_badges;
 create policy sspace_user_badges_read_own on public.sspace_user_badges for select to authenticated using(user_id=(select auth.uid()));
+drop policy if exists sspace_music_plays_read_own on public.sspace_music_plays;
+create policy sspace_music_plays_read_own on public.sspace_music_plays for select to authenticated using(user_id=(select auth.uid()));
+grant select on public.sspace_music_plays to authenticated;
+drop policy if exists community_music_insert on public.sspace_music_tracks;
+create policy community_music_insert on public.sspace_music_tracks for insert to authenticated with check(user_id=(select auth.uid()));
+drop policy if exists community_music_delete on public.sspace_music_tracks;
+create policy community_music_delete on public.sspace_music_tracks for delete to authenticated using(user_id=(select auth.uid()));
 insert into public.sspace_badge_catalog(code,title,description,icon,points_threshold) values
 ('first-steps','Premiers pas','Tu as gagné tes premiers points SSPACE.','🌱',5),
 ('regular','Membre actif','Tu as accumulé 25 points communautaires.','⭐',25),
