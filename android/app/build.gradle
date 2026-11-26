@@ -11,3 +11,25 @@ android {
         versionName '1.0.0'
     }
 }
+ 
+dependencies {
+    implementation 'androidx.webkit:webkit:1.12.1'
+}
+
+tasks.register('syncSspaceWebAssets', Sync) {
+    from(rootProject.projectDir.parentFile) {
+        include 'index.html'
+        include 'modules.html'
+        include 'messenger.html'
+        include 'manifest.webmanifest'
+        include 'messenger.webmanifest'
+        include 'sw.js'
+        include 'icons/**'
+        include 'assets/**'
+    }
+    into layout.projectDirectory.dir('src/main/assets')
+}
+
+tasks.named('preBuild').configure {
+    dependsOn('syncSspaceWebAssets')
+}
