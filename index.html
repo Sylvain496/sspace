@@ -893,8 +893,8 @@ function profileDisplayName(profile,user){const candidates=[profile?.display_nam
 function applyProfileCover(element,url){
  if(!element)return;
  const safe=String(url||'').trim();
- const escaped=safe.replace(/["\\\n\r]/g,'\\function applyProfileCover(element,url){if(!element)return;const safe=String(url||'').trim();element.style.backgroundImage=safe?'linear-gradient(120deg,#08112655,#08112622),url("'+safe.replace(/["\\]/g,'\\function applyProfileCover(element,url){if(!element)return;const safe=String(url||'').trim();element.style.backgroundImage=safe?'linear-gradient(120deg,#08112655,#08112622),url("'+safe.replace(/["\\\n\r]/g,'\\const initials=s=>(s||'S').trim().slice(0,1).toUpperCase();')+'")':'';element.classList.toggle('has-cover',!!safe)}')+'")':'';element.classList.toggle('has-cover',!!safe)}');
- element.style.backgroundImage=safe?'linear-gradient(120deg,#08112655,#08112622),url("'+escaped+'")':'';
+ const escaped=encodeURI(safe).replace(/'/g,'%27');
+ element.style.backgroundImage=safe?`linear-gradient(120deg,#08112655,#08112622),url('${escaped}')`:'';
  element.classList.toggle('has-cover',!!safe);
 }
 function toast(s){$('toast').textContent=s;$('toast').classList.remove('hidden');setTimeout(()=>$('toast').classList.add('hidden'),2800)}
