@@ -14,6 +14,9 @@ import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
+import androidx.webkit.WebViewAssetLoader;
 import android.webkit.WebSettings;
 import android.view.Window;
 import android.widget.Toast;
@@ -21,10 +24,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
 public class MainActivity extends Activity {
-    private static final int REQUEST_AUDIO_PERMISSION = 501;
+    private static final int REQUEST_MEDIA_PERMISSION = 501;
     private static final int REQUEST_FILE_PICKER = 502;
     private WebView webView;
-    private PermissionRequest pendingAudioRequest;
+    private PermissionRequest pendingMediaRequest;
+    private String[] pendingMediaResources = new String[0];
+    private String[] pendingAndroidPermissions = new String[0];
     private ValueCallback<Uri[]> filePathCallback;
     private String pendingOverlayUserId = "";
     private String pendingOverlayDisplayName = "";
@@ -45,34 +50,67 @@ public class MainActivity extends Activity {
         settings.setBuiltInZoomControls(false);
         settings.setDisplayZoomControls(false);
         settings.setJavaScriptCanOpenWindowsAutomatically(false);
-        webView.setWebViewClient(new WebViewClient());
+        WebViewAssetLoader assetLoader = new WebViewAssetLoader.Builder()
+            .addPathHandler("/assets/", new WebViewAssetLoader.AssetsPathHandler(this))
+            .build();
+        webView.setWebViewClient(new WebViewClient() {
+            @Override public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+                return assetLoader.shouldInterceptRequest(request.getUrl());
+            }
+        });
         webView.addJavascriptInterface(new NativeBridge(), "SSPACEAndroid");
         webView.setWebChromeClient(new WebChromeClient() {
             @Override public void onPermissionRequest(PermissionRequest request) {
                 runOnUiThread(() -> {
-                    boolean audioRequested = false;
-                    for (String resource : request.getResources()) {
-                        if (PermissionRequest.RESOURCE_AUDIO_CAPTURE.equals(resource)) audioRequested = true;
-                    }
                     Uri origin = request.getOrigin();
                     boolean trustedOrigin = origin != null
                         && "https".equals(origin.getScheme())
                         && "appassets.androidplatform.net".equals(origin.getHost());
-                    if (!audioRequested || !trustedOrigin) {
+                    if (!trustedOrigin) {
                         request.deny();
                         return;
                     }
-                    if (checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
-                        request.grant(new String[]{PermissionRequest.RESOURCE_AUDIO_CAPTURE});
-                    } else {
-                        pendingAudioRequest = request;
-                        requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_AUDIO_PERMISSION);
+
+                    String[] resources = request.getResources();
+                    boolean audioRequested = false;
+                    boolean videoRequested = false;
+                    for (String resource : resources) {
+                        if (PermissionRequest.RESOURCE_AUDIO_CAPTURE.equals(resource)) audioRequested = true;
+                        else if (PermissionRequest.RESOURCE_VIDEO_CAPTURE.equals(resource)) videoRequested = true;
+                        else {
+                            request.deny();
+                            return;
+                        }
                     }
+                    if (!audioRequested && !videoRequested) {
+                        request.deny();
+                        return;
+                    }
+
+                    java.util.ArrayList<String> required = new java.util.ArrayList<>();
+                    if (audioRequested && checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED)
+                        required.add(Manifest.permission.RECORD_AUDIO);
+                    if (videoRequested && checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+                        required.add(Manifest.permission.CAMERA);
+
+                    if (required.isEmpty()) {
+                        request.grant(resources);
+                        return;
+                    }
+                    if (pendingMediaRequest != null) pendingMediaRequest.deny();
+                    pendingMediaRequest = request;
+                    pendingMediaResources = resources;
+                    pendingAndroidPermissions = required.toArray(new String[0]);
+                    requestPermissions(pendingAndroidPermissions, REQUEST_MEDIA_PERMISSION);
                 });
             }
 
             @Override public void onPermissionRequestCanceled(PermissionRequest request) {
-                if (pendingAudioRequest == request) pendingAudioRequest = null;
+                if (pendingMediaRequest == request) {
+                    pendingMediaRequest = null;
+                    pendingMediaResources = new String[0];
+                    pendingAndroidPermissions = new String[0];
+                }
             }
 
             @Override public boolean onShowFileChooser(WebView view, ValueCallback<Uri[]> callback, FileChooserParams params) {
@@ -147,32 +185,26 @@ public class MainActivity extends Activity {
     }
 
     private void loadBundledApp() {
-        try (InputStream input = getAssets().open("index.html");
-             ByteArrayOutputStream output = new ByteArrayOutputStream()) {
-            byte[] buffer = new byte[8192];
-            int count;
-            while ((count = input.read(buffer)) != -1) output.write(buffer, 0, count);
-            String html = output.toString("UTF-8");
-            webView.loadDataWithBaseURL(
-                "https://appassets.androidplatform.net/assets/index.html",
-                html, "text/html", "UTF-8", null
-            );
-        } catch (Exception error) {
-            Toast.makeText(this, "Impossible de charger SSPACE.", Toast.LENGTH_LONG).show();
-        }
+        webView.loadUrl("https://appassets.androidplatform.net/assets/index.html");
     }
 
     @Override public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_AUDIO_PERMISSION && pendingAudioRequest != null) {
-            PermissionRequest request = pendingAudioRequest;
-            pendingAudioRequest = null;
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                request.grant(new String[]{PermissionRequest.RESOURCE_AUDIO_CAPTURE});
+        if (requestCode == REQUEST_MEDIA_PERMISSION && pendingMediaRequest != null) {
+            boolean granted = grantResults.length == pendingAndroidPermissions.length;
+            for (int result : grantResults) {
+                if (result != PackageManager.PERMISSION_GRANTED) granted = false;
+            }
+            PermissionRequest request = pendingMediaRequest;
+            pendingMediaRequest = null;
+            if (granted) {
+                request.grant(pendingMediaResources);
             } else {
                 request.deny();
-                Toast.makeText(this, "L’accès au microphone a été refusé.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "L’accès au microphone ou à la caméra a été refusé.", Toast.LENGTH_SHORT).show();
             }
+            pendingMediaResources = new String[0];
+            pendingAndroidPermissions = new String[0];
         }
     }
 

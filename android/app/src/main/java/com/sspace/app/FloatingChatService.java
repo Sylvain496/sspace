@@ -21,6 +21,9 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebSettings;
 import android.webkit.WebViewClient;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
+import androidx.webkit.WebViewAssetLoader;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -204,7 +207,13 @@ public class FloatingChatService extends Service {
         chatWebView.setBackgroundColor(Color.rgb(13, 17, 35));
         chatWebView.addJavascriptInterface(new OverlayBridge(), "SSPACEOverlay");
         chatWebView.setWebChromeClient(new WebChromeClient());
+        WebViewAssetLoader assetLoader = new WebViewAssetLoader.Builder()
+            .addPathHandler("/assets/", new WebViewAssetLoader.AssetsPathHandler(this))
+            .build();
         chatWebView.setWebViewClient(new WebViewClient() {
+            @Override public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+                return assetLoader.shouldInterceptRequest(request.getUrl());
+            }
             @Override public void onPageFinished(WebView view, String url) {
                 openConversationInWebView();
             }
@@ -230,14 +239,7 @@ public class FloatingChatService extends Service {
     }
 
     private void loadBundledApp() {
-        try (InputStream input = getAssets().open("index.html"); ByteArrayOutputStream output = new ByteArrayOutputStream()) {
-            byte[] buffer = new byte[8192]; int count;
-            while ((count = input.read(buffer)) != -1) output.write(buffer, 0, count);
-            String html = output.toString("UTF-8");
-            chatWebView.loadDataWithBaseURL("https://appassets.androidplatform.net/assets/index.html", html, "text/html", "UTF-8", null);
-        } catch (Exception e) {
-            Toast.makeText(this, "Impossible de charger la conversation flottante.", Toast.LENGTH_SHORT).show();
-        }
+        chatWebView.loadUrl("https://appassets.androidplatform.net/assets/index.html");
     }
 
     private void openConversationInWebView() {
