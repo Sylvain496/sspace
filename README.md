@@ -23,3 +23,7 @@ Dans GitHub, ouvrir Actions → Build Android APK → Run workflow. À la fin, t
 
 ## À compléter avant lancement public
 Cette version constitue le socle fonctionnel. Il reste à ajouter les tests utilisateurs, la modération et signalement, la récupération de mot de passe personnalisée, l'envoi de photos, les notifications, et les outils administrateur. Vérifier aussi les réglages d'URL de redirection et de confirmation courriel dans Supabase Auth.
+
+
+## Centre des 12 modules
+La page `modules.html` fournit un tableau de bord responsive des douze modules SSPACE, avec recherche, filtres, détails et état d'intégration. Elle distingue les fonctions déjà présentes, partielles et celles à développer. Elle ne remplace pas les intégrations backend encore nécessaires.
