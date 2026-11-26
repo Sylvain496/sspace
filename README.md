@@ -27,3 +27,11 @@ Cette version constitue le socle fonctionnel. Il reste à ajouter les tests util
 
 ## Centre des 12 modules
 La page `modules.html` fournit un tableau de bord responsive des douze modules SSPACE, avec recherche, filtres, détails et état d'intégration. Elle distingue les fonctions déjà présentes, partielles et celles à développer. Elle ne remplace pas les intégrations backend encore nécessaires.
+
+
+## Intégration du Centre et du Salon des connectés
+- Le Centre des 12 modules est accessible depuis le menu principal et la navigation latérale.
+- Le module Salon des connectés est relié au projet Supabase SSPACE : lecture des 50 derniers messages, envoi authentifié et abonnement Supabase Realtime sur `sspace_live_chat_messages`.
+- Le salon exige une session SSPACE active. La table possède RLS activée, des règles de lecture pour les membres authentifiés et une règle d'insertion limitée à l'auteur connecté (500 caractères maximum).
+- Le salon est livré en bêta : modération renforcée, tests multi-appareils et anti-abus restent à compléter.
+- Le reste des modules doit être raccordé progressivement aux tables et fonctions existantes, après audit des politiques RLS. Aucune modification de schéma n'a été appliquée dans cette étape.
