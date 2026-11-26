@@ -61,7 +61,7 @@ document.getElementById("search").addEventListener("input",render);document.getE
  start().catch(e=>{status.textContent='ERREUR';list.textContent='Connexion impossible : '+e.message;});
  window.addEventListener('beforeunload',()=>{if(channel)client.removeChannel(channel);});
 })();
-
+</script>
 <script>
 (()=>{
  const status=id=>document.getElementById(id); const text=(id,value)=>{const el=status(id);if(el)el.textContent=value;};
@@ -84,5 +84,4 @@ document.getElementById("search").addEventListener("input",render);document.getE
  async function init(){try{await requireUser();await Promise.all([loadStats(),loadMusic(),loadRewards(),loadStore()]);}catch(e){['statsStatus','musicStatus','rewardsStatus','storePremiumState'].forEach(id=>text(id,e.message));['musicUploadForm','claimDailyReward'].forEach(id=>{const el=status(id);if(el)el.disabled=true;});status('musicUploadForm').hidden=true;}}
  init();db.auth.onAuthStateChange((event,session)=>{const next=session?.user||null;if(next?.id!==me?.id){me=next;if(me)init();else{['statsStatus','musicStatus','rewardsStatus','storePremiumState'].forEach(id=>text(id,'Connexion requise.'));}}});
 })();
-</script>
 </script></body></html>
