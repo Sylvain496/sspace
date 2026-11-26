@@ -729,6 +729,13 @@ body.app-light .topin>.brand{filter:drop-shadow(0 2px 0 #8a571d33) drop-shadow(0
 @media(max-width:650px){#appView{padding-left:0;padding-right:0}#appView .layout{display:block;width:100%;padding:12px 0 28px}#appView .layout>main{width:100%;padding:0;min-width:0}#appView section[id$='View']{width:100%;min-width:0;overflow-x:clip}#quickComposePanel,#writeView>.card{width:100%;margin-left:0;margin-right:0;padding:13px}#quickComposePanel .online-banner-head{display:flex;flex-direction:column;align-items:stretch}#quickComposePanel .feed-create-actions{justify-content:flex-start;width:100%}#quickComposePanel .feed-create-actions .btn{flex:1 1 auto;min-width:0;white-space:normal}#quickComposePanel .compose-row,#writeView .compose-row{align-items:stretch}#quickComposePanel .compose-row>.btn,#writeView .compose-row>.btn{width:100%}.modal,.notification-popup{padding: max(8px,env(safe-area-inset-top)) 8px max(8px,env(safe-area-inset-bottom))}.modal .card,.notification-popup-card{width:100%;max-height:calc(var(--visible-height,100dvh) - 16px - env(safe-area-inset-top) - env(safe-area-inset-bottom));padding:14px}.main-menu{left:8px;right:8px;top:68px;width:auto;max-height:calc(100dvh - 78px - env(safe-area-inset-bottom))}.message-launcher{left:8px;right:8px;bottom:calc(12px + env(safe-area-inset-bottom));width:auto;max-width:none;max-height:calc(100dvh - 90px - env(safe-area-inset-bottom))}.chat-compose{flex-wrap:wrap}.chat-compose button{flex:0 0 auto}.live-stage{min-height:min(58dvh,390px)}.profile-info{flex-wrap:wrap}.profile-info>div:last-child{flex:1 1 150px}}
 @media(max-width:380px){#quickComposePanel .feed-create-actions .btn{flex-basis:100%}.compose-row>*{min-width:0}.notification-popup-card{grid-template-columns:40px minmax(0,1fr);gap:9px;padding:13px}.notification-popup-icon{width:38px;height:38px}}
 @media(orientation:landscape) and (max-height:500px){.modal,.notification-popup{place-items:start center}.modal .card,.notification-popup-card{max-height:calc(100dvh - 16px);margin:8px auto}.main-menu{max-height:calc(100dvh - 76px)}}
+
+/* Mobile alignment for the feed publishing actions */
+.online-banner,.online-banner-head,.feed-create-actions{min-width:0;max-width:100%}
+.online-banner-head{display:flex;flex-wrap:wrap;align-items:flex-start}
+.feed-create-actions{display:flex;flex-wrap:wrap;gap:7px;min-width:0;max-width:100%}
+.feed-create-actions .btn{min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere}
+@media(max-width:650px){.online-banner-head{flex-direction:column;align-items:stretch}.feed-create-actions{width:100%;justify-content:flex-start}.feed-create-actions .btn{flex:1 1 120px}.online-title{overflow-wrap:anywhere}}
 </style>
 
 <style id="sspace-notification-badge-visibility">
