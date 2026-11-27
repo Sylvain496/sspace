@@ -720,6 +720,35 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 :root[data-app-theme="light"] .post-card p,:root[data-app-theme="light"] .feed-card p,:root[data-app-theme="light"] .chat-message{color:#26334f}
 :root[data-app-theme="light"] .preference-choice.selected{background:#e4edff!important;color:#244d9a!important;border-color:#7399df!important}
 :root[data-app-theme="light"] .profile-editor-section{color:#6550a5}
+
+/* SSPACE responsive frame: centred, fluid, and bounded to the available screen */
+#appView.shell{width:min(100%,1440px);max-width:1440px;margin-inline:auto}
+#appView .layout{width:100%;min-width:0;align-items:start;grid-template-columns:minmax(190px,230px) minmax(0,1fr) minmax(210px,250px);gap:clamp(12px,1.6vw,20px)}
+#appView main,#appView .leftcol,#appView .rightcol{min-width:0;width:100%}
+#appView .online-banner,#appView .salon-panel{width:100%;max-width:100%;min-width:0}
+#appView .salon-messages{height:clamp(260px,36vh,430px);max-height:min(52vh,520px);overscroll-behavior:contain}
+#appView .salon-form{width:100%;min-width:0}
+#appView .salon-form input{width:100%;min-width:0}
+@media(max-width:1100px){#appView .layout{grid-template-columns:190px minmax(0,1fr);gap:14px}}
+@media(max-width:650px){
+ #appView.shell{width:100%;max-width:100%;padding-inline:10px}
+ #appView .layout{display:block;width:100%;padding-top:12px}
+ #appView main{width:100%;max-width:100%;min-width:0}
+ #appView .online-banner{padding:12px}
+ #appView .online-banner-head{align-items:flex-start;flex-wrap:wrap}
+ #appView .online-banner-head>div:last-child{display:flex;flex-wrap:wrap;gap:7px;max-width:100%}
+ #appView .salon-messages{height:clamp(230px,34vh,340px);max-height:42vh;padding:10px}
+ #appView .salon-message-content{max-width:calc(100% - 42px)}
+ #appView .salon-form{align-items:stretch;gap:7px;padding:8px}
+ #appView .salon-form input{flex:1 1 auto}
+ #appView .salon-form button{flex:0 0 auto;padding:9px 11px}
+}
+@media(max-width:380px){
+ #appView.shell{padding-inline:7px}
+ #appView .salon-head{gap:8px;align-items:flex-start;flex-wrap:wrap}
+ #appView .salon-form button{padding:8px}
+ #appView .salon-bubble{font-size:13px;padding:8px 10px}
+}
 </style>
 
 <style id="sspace-notification-badge-visibility">
@@ -1034,18 +1063,51 @@ $('closePublicProfile').onclick=()=>$('publicProfileModal').classList.add('hidde
 
 let salonChannel=null,salonTarget=null;const salonColors=["#70d7ff","#b99aff","#ff8fcf","#8fe3b0","#ffd36e","#ff8a8a","#a5f3fc","#f0abfc","#c4b5fd","#fdba74"];function salonColor(id){let h=0;for(let i=0;i<id.length;i++)h=(h*31+id.charCodeAt(i))>>>0;return salonColors[h%salonColors.length]}function salonMutedIds(){try{return JSON.parse(localStorage.getItem("sspace_salon_muted_"+currentUser.id)||"[]")}catch(_){return []}}function appendSalonMessage(msg){
  const host=$("salonMessages");if(!host||!msg?.text||salonMutedIds().includes(msg.userId))return;
+ const messageId=msg.id?String(msg.id):"";
+ if(messageId&&host.querySelector('[data-message-id="'+CSS.escape(messageId)+'"]'))return;
  const mine=msg.userId===currentUser?.id,line=document.createElement("div");line.className="salon-line "+(mine?"mine":"theirs");
+ if(messageId)line.dataset.messageId=messageId;
+ const createdAt=msg.at||new Date().toISOString();line.dataset.createdAt=String(new Date(createdAt).getTime());
  const avatar=document.createElement("button");avatar.type="button";avatar.className="salon-avatar-btn";avatar.dataset.salonUser=msg.userId||"";avatar.title="En savoir plus sur @"+(msg.username||"membre");
  if(msg.avatarUrl){const img=document.createElement("img");img.src=msg.avatarUrl;img.alt="";avatar.append(img)}else avatar.textContent=initials(msg.displayName||msg.username||"Membre");
  const content=document.createElement("div");content.className="salon-message-content";
  const name=document.createElement("button");name.type="button";name.className="salon-click-name";name.dataset.salonUser=msg.userId||"";name.textContent="@"+(msg.username||"membre");name.title="Voir le profil de ce membre";
  const bubble=document.createElement("div");bubble.className="salon-bubble";bubble.textContent=msg.text;
- const time=document.createElement("div");time.className="salon-time";time.textContent=new Date(msg.at||Date.now()).toLocaleTimeString("fr-CA",{hour:"2-digit",minute:"2-digit"});
+ const time=document.createElement("div");time.className="salon-time";time.textContent=new Date(createdAt).toLocaleString("fr-CA",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});
  content.append(name,bubble,time);line.append(avatar,content);
  if(!mine){const report=document.createElement("button");report.type="button";report.className="salon-report-btn";report.textContent="🚩";report.title="Signaler ce message";report.dataset.reportUser=msg.userId||"";report.dataset.reportText=msg.text;line.append(report)}
- host.append(line);while(host.children.length>150)host.removeChild(host.firstChild);host.scrollTop=host.scrollHeight;
+ const later=[...host.querySelectorAll(".salon-line")].find(el=>Number(el.dataset.createdAt)>Number(line.dataset.createdAt));
+ if(later)host.insertBefore(line,later);else host.append(line);
+ while(host.querySelectorAll(".salon-line").length>150)host.querySelector(".salon-line")?.remove();
+ host.scrollTop=host.scrollHeight;
 }
-function salonWelcome(){const host=$("salonMessages");if(!host)return;const box=document.createElement("div");box.className="salon-welcome";box.innerHTML='<b>👋 Bienvenue dans le Chat SSPACE!</b><p>Respecte les autres, leur intimité et leurs limites. N’envoie pas de renseignements personnels ni de contenu harcelant, menaçant ou illégal.</p><p><b>🔎 Modération :</b> cette conversation peut être surveillée par les modérateurs autorisés. Ils peuvent bloquer des membres, bannir des comptes et retirer les contenus qui contreviennent aux règles de la plateforme.</p><small>Le salon est actuellement un chat en direct temporaire : les messages ne sont pas enregistrés durablement.</small>';host.append(box);host.scrollTop=host.scrollHeight}function startSalon(){if(!currentUser||salonChannel)return;salonChannel=db.channel("sspace-public-salon",{config:{broadcast:{self:false}}}).on("broadcast",{event:"message"},({payload})=>appendSalonMessage(payload)).on("broadcast",{event:"salon_report"},({payload})=>appendSalonReport(payload)).subscribe(status=>{if(status==="SUBSCRIBED"){$("salonStatus").textContent="Salon en direct";salonWelcome()}})}function openSalonUserOptions(id){if(!id||id===currentUser?.id)return;salonTarget=id;const profile=(onlineChannel?.presenceState()||{});let p=null;for(const group of Object.values(profile))for(const member of group||[])if(member.userId===id)p=member;$("salonUserName").textContent="@"+(p?.username||p?.displayName||"membre");$("salonUserModal").classList.remove("hidden")}document.addEventListener("DOMContentLoaded",()=>{$("salonUserClose").onclick=()=>$("salonUserModal").classList.add("hidden");$("salonUserModal").addEventListener("click",e=>{if(e.target===$("salonUserModal"))$("salonUserModal").classList.add("hidden")});$("salonUserAddFriend").onclick=async()=>{if(!salonTarget)return;const {data,error}=await db.from("friend_requests").insert({sender_id:currentUser.id,receiver_id:salonTarget,status:"pending"}).select();if(error)toast(error.code==="23505"?"Demande déjà envoyée ou relation existante.":error.message);else toast("Demande d’ami envoyée!");$("salonUserModal").classList.add("hidden")};$("salonUserMute").onclick=()=>{if(!salonTarget)return;const list=salonMutedIds();if(!list.includes(salonTarget))list.push(salonTarget);localStorage.setItem("sspace_salon_muted_"+currentUser.id,JSON.stringify(list));$("salonUserModal").classList.add("hidden");toast("Tu ne verras plus les messages de ce membre dans ce salon sur cet appareil.")};$("salonUserUnmute").onclick=()=>{if(!salonTarget)return;localStorage.setItem("sspace_salon_muted_"+currentUser.id,JSON.stringify(salonMutedIds().filter(x=>x!==salonTarget)));$("salonUserModal").classList.add("hidden");toast("Membre réaffiché.")};$("salonMessages").addEventListener("click",e=>{const member=e.target.closest("[data-salon-user]");if(member&&member.dataset.salonUser)openPublicProfile(member.dataset.salonUser)})});$("salonInput").addEventListener("focus",()=>{$("salonPanel").scrollIntoView({block:"nearest",behavior:"smooth"})});$("salonForm").addEventListener("submit",e=>{e.preventDefault();const text=$("salonInput").value.trim();if(!text||!currentUser||!salonChannel)return;const msg={userId:currentUser.id,username:currentProfile?.username||"membre",displayName:currentProfile?.display_name||currentProfile?.username||"Membre",avatarUrl:currentProfile?.avatar_url||null,text:text.slice(0,500),color:salonColor(currentUser.id),at:new Date().toISOString()};salonChannel.send({type:"broadcast",event:"message",payload:msg});appendSalonMessage(msg);$("salonInput").value=""});
+async function salonRowToMessage(row){
+ if(!row?.id)return;
+ const {data,error}=await db.from("sspace_community_messages").select("id,user_id,body,created_at,profiles:profiles!sspace_messages_profile_fk(username,display_name,avatar_url)").eq("id",row.id).maybeSingle();
+ if(error){console.warn("SSPACE salon profile lookup:",error.message);return}
+ if(!data)return;
+ const p=data.profiles||{};
+ appendSalonMessage({id:data.id,userId:data.user_id,username:p.username||"membre",displayName:p.display_name||p.username||"Membre",avatarUrl:p.avatar_url||null,text:data.body,at:data.created_at});
+}
+async function loadSalonHistory(){
+ const host=$("salonMessages");if(!host||!currentUser)return;
+ $("salonStatus").textContent="Chargement de l’historique…";
+ const {data,error}=await db.from("sspace_community_messages").select("id,user_id,body,created_at,profiles:profiles!sspace_messages_profile_fk(username,display_name,avatar_url)").order("created_at",{ascending:false}).limit(100);
+ if(error){$("salonStatus").textContent="Historique indisponible";host.innerHTML='<div class="salon-welcome">Impossible de charger l’historique pour le moment. Réessaie dans quelques instants.</div>';console.error("SSPACE salon history:",error.message);return}
+ host.innerHTML="";
+ (data||[]).reverse().forEach(row=>{const p=row.profiles||{};appendSalonMessage({id:row.id,userId:row.user_id,username:p.username||"membre",displayName:p.display_name||p.username||"Membre",avatarUrl:p.avatar_url||null,text:row.body,at:row.created_at})});
+ if(!host.querySelector(".salon-line")){const empty=document.createElement("div");empty.className="salon-welcome";empty.textContent="Le salon est prêt. Les messages envoyés ici seront conservés dans l’historique.";host.append(empty)}
+ $("salonStatus").textContent="Historique sauvegardé · en direct";
+ host.scrollTop=host.scrollHeight;
+}
+function startSalon(){
+ if(!currentUser||salonChannel)return;
+ salonChannel=db.channel("sspace-public-salon",{config:{broadcast:{self:false}}})
+  .on("postgres_changes",{event:"INSERT",schema:"public",table:"sspace_community_messages"},payload=>salonRowToMessage(payload.new))
+  .on("broadcast",{event:"salon_report"},({payload})=>appendSalonReport(payload))
+  .subscribe(status=>{if(status==="SUBSCRIBED"){ $("salonStatus").textContent="Connexion au salon…";loadSalonHistory() }else if(status==="CHANNEL_ERROR"||status==="TIMED_OUT"){$("salonStatus").textContent="Connexion interrompue"}});
+}
+function openSalonUserOptions(id){if(!id||id===currentUser?.id)return;salonTarget=id;const profile=(onlineChannel?.presenceState()||{});let p=null;for(const group of Object.values(profile))for(const member of group||[])if(member.userId===id)p=member;$("salonUserName").textContent="@"+(p?.username||p?.displayName||"membre");$("salonUserModal").classList.remove("hidden")}document.addEventListener("DOMContentLoaded",()=>{$("salonUserClose").onclick=()=>$("salonUserModal").classList.add("hidden");$("salonUserModal").addEventListener("click",e=>{if(e.target===$("salonUserModal"))$("salonUserModal").classList.add("hidden")});$("salonUserAddFriend").onclick=async()=>{if(!salonTarget)return;const {data,error}=await db.from("friend_requests").insert({sender_id:currentUser.id,receiver_id:salonTarget,status:"pending"}).select();if(error)toast(error.code==="23505"?"Demande déjà envoyée ou relation existante.":error.message);else toast("Demande d’ami envoyée!");$("salonUserModal").classList.add("hidden")};$("salonUserMute").onclick=()=>{if(!salonTarget)return;const list=salonMutedIds();if(!list.includes(salonTarget))list.push(salonTarget);localStorage.setItem("sspace_salon_muted_"+currentUser.id,JSON.stringify(list));$("salonUserModal").classList.add("hidden");toast("Tu ne verras plus les messages de ce membre dans ce salon sur cet appareil.")};$("salonUserUnmute").onclick=()=>{if(!salonTarget)return;localStorage.setItem("sspace_salon_muted_"+currentUser.id,JSON.stringify(salonMutedIds().filter(x=>x!==salonTarget)));$("salonUserModal").classList.add("hidden");toast("Membre réaffiché.")};$("salonMessages").addEventListener("click",e=>{const member=e.target.closest("[data-salon-user]");if(member&&member.dataset.salonUser)openPublicProfile(member.dataset.salonUser)})});$("salonInput").addEventListener("focus",()=>{$("salonPanel").scrollIntoView({block:"nearest",behavior:"smooth"})});$("salonForm").addEventListener("submit",async e=>{e.preventDefault();const input=$("salonInput"),button=$("salonForm").querySelector("button[type=submit]"),text=input.value.trim();if(!text||!currentUser||!salonChannel)return;button.disabled=true;const {data,error}=await db.from("sspace_community_messages").insert({user_id:currentUser.id,body:text.slice(0,500)}).select("id,user_id,body,created_at,profiles:profiles!sspace_messages_profile_fk(username,display_name,avatar_url)").single();button.disabled=false;if(error){toast("Message non envoyé : "+error.message);return}const p=data.profiles||{};appendSalonMessage({id:data.id,userId:data.user_id,username:p.username||currentProfile?.username||"membre",displayName:p.display_name||currentProfile?.display_name||"Membre",avatarUrl:p.avatar_url||currentProfile?.avatar_url||null,text:data.body,at:data.created_at});input.value=""});
 function renderOnlineUsers(state){
  const members=Object.values(state||{}).flat().filter((p,i,a)=>p.userId&&a.findIndex(x=>x.userId===p.userId)===i);
  members.sort((a,b)=>a.userId===currentUser?.id?-1:(a.displayName||'').localeCompare(b.displayName||'','fr'));
